@@ -27,6 +27,7 @@ async function createWindow(): Promise<void> {
       ? join(process.resourcesPath, "migrations")
       : join(app.getAppPath(), "migrations"),
   );
+  store.purchases.recoverInterruptedRuns();
   const developmentUrl = app.isPackaged ? undefined : process.env.ELECTRON_RENDERER_URL;
   const rendererUrl =
     developmentUrl ?? pathToFileURL(join(__dirname, "../renderer/index.html")).href;

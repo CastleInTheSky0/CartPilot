@@ -32,7 +32,7 @@
     "handoff_stage": "implementation",
     "implementation_gate": "authorized_by_user_2026_10_15",
     "current_milestone": "M2",
-    "implementation_checkpoint": "M1 实机 Chrome 授权接入待验收；M2 通用任务契约与数量规则已通过离线验证，继续事务订单内核",
+    "implementation_checkpoint": "M1 实机 Chrome 授权接入待验收；M2 通用契约及事务订单内核已通过双进程并发、恢复与桌面验证，继续状态机和旧数据迁移",
     "open_questions": "",
     "resolved_questions": "Q01,Q02,Q03,Q04,Q05",
     "source": "grill-me",

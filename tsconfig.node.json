@@ -7,6 +7,8 @@
     "src/shared",
     "tests/unit",
     "tests/packaging",
+    "tests/integration",
+    "tests/fixtures/reservation-worker.ts",
     "electron.vite.config.ts",
     "drizzle.config.ts"
   ]

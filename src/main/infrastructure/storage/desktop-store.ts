@@ -12,8 +12,11 @@ import {
 } from "../../../shared/contracts/browser.ts";
 import { StorageStatusSchema, type StorageStatus } from "../../../shared/contracts/storage.ts";
 import { desktopSettings } from "./schema.ts";
+import type { PurchaseStore } from "../../application/purchase-store.ts";
+import { createPurchaseStore } from "./purchase-store.ts";
 
 export interface DesktopStore {
+  purchases: PurchaseStore;
   status(): StorageStatus;
   readBrowserPreferences(): ConnectBrowserInput;
   saveBrowserPreferences(input: ConnectBrowserInput): void;
@@ -68,6 +71,7 @@ export function openDesktopStore(dataDirectory: string, migrationsDirectory: str
     });
 
     return {
+      purchases: createPurchaseStore(database, db),
       status(): StorageStatus {
         return { ...status };
       },

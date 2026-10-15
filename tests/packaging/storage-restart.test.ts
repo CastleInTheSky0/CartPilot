@@ -10,11 +10,13 @@ test("Electron 原生 SQLite 完成迁移，重启保留设置且不重复迁移
   const dataDirectory = await mkdtemp(join(tmpdir(), "cartpilot-storage-"));
   const first = await launchDesktop(dataDirectory);
   let installationId: string;
+  let schemaVersion: number;
   try {
     const page = await first.firstWindow();
     const runtime = await page.evaluate(() => window.cartPilot.getRuntimeInfo());
     installationId = runtime.storage.installationId;
-    assert.equal(runtime.storage.schemaVersion, 1);
+    schemaVersion = runtime.storage.schemaVersion;
+    assert.ok(schemaVersion >= 2);
     assert.equal(runtime.storage.databasePath, join(dataDirectory, "cartpilot.sqlite"));
     assert.deepEqual(await page.evaluate(() => window.cartPilot.getBrowserPreferences()), {
       profileDirectory: null,
@@ -32,7 +34,7 @@ test("Electron 原生 SQLite 完成迁移，重启保留设置且不重复迁移
     const page = await second.firstWindow();
     const runtime = await page.evaluate(() => window.cartPilot.getRuntimeInfo());
     assert.equal(runtime.storage.installationId, installationId);
-    assert.equal(runtime.storage.schemaVersion, 1);
+    assert.equal(runtime.storage.schemaVersion, schemaVersion);
     assert.equal(
       (await page.evaluate(() => window.cartPilot.getBrowserPreferences())).profileDirectory,
       "Profile 999999999",

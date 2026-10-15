@@ -8,6 +8,13 @@
       "when": 1792063464708,
       "tag": "0000_desktop-settings",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1792066852020,
+      "tag": "0001_purchase-ledger",
+      "breakpoints": true
     }
   ]
 }

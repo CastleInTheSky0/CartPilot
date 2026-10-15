@@ -11,7 +11,12 @@ export const SpecificationsSchema = z
   .record(z.string().trim().min(1).max(60), LabelSchema)
   .refine((value) => Object.keys(value).length <= 30, "规格不能超过 30 项")
   .refine((value) => {
-    const keys = Object.keys(value).map((key) => key.normalize("NFKC").toLowerCase());
+    const keys = Object.keys(value).map((key) =>
+      key
+        .normalize("NFKC")
+        .replace(/[\s\u200b]/g, "")
+        .toLowerCase(),
+    );
     return new Set(keys).size === keys.length;
   }, "规格名称不能重复");
 
