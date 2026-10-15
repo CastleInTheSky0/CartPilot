@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp } from "node:fs/promises";
+import { mkdir, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { resolve, join } from "node:path";
 import test from "node:test";
@@ -20,7 +20,24 @@ test("构建后的桌面可独立启动，renderer 只有受限 preload 能力",
     await page.getByText(dataDirectory, { exact: true }).waitFor();
     assert.equal(await page.evaluate(() => "require" in window), false);
     assert.equal(await page.evaluate(() => "process" in window), false);
-    assert.deepEqual(await page.evaluate(() => Object.keys(window.cartPilot)), ["getRuntimeInfo"]);
+    const methods = await page.evaluate(() => Object.keys(window.cartPilot));
+    assert.ok(methods.includes("getRuntimeInfo"));
+    assert.equal(
+      methods.some((method) => /exec|script|sql|cookie/i.test(method)),
+      false,
+    );
+    await page.getByRole("button", { name: "连接普通 Chrome" }).waitFor();
+    const browserState = await page.evaluate(() => window.cartPilot.getBrowserState());
+    assert.equal(browserState.connection.phase, "disconnected");
+    assert.equal(browserState.channels.length, 5);
+    await page.evaluate(() =>
+      window.cartPilot.connectBrowser({ profileDirectory: "Profile 999999999" }),
+    );
+    await page.getByText(/未找到官方扩展/).waitFor();
+    const failed = await page.evaluate(() => window.cartPilot.getBrowserState());
+    assert.equal(failed.connection.phase, "error");
+    await page.evaluate(() => window.cartPilot.disconnectBrowser());
+    await page.getByRole("status").filter({ hasText: "未连接" }).waitFor();
     const preferences = await application
       .browserWindow(page)
       .then((window) => window.evaluate((value) => value.webContents.getLastWebPreferences()));
@@ -31,6 +48,8 @@ test("构建后的桌面可独立启动，renderer 只有受限 preload 能力",
       window.open("https://example.com/");
     });
     assert.equal(application.windows().length, 1);
+    await mkdir(resolve("output/playwright"), { recursive: true });
+    await page.screenshot({ path: resolve("output/playwright/desktop.png"), fullPage: true });
   } finally {
     await application.close();
   }

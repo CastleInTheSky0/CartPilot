@@ -7,9 +7,18 @@ const root = fileURLToPath(new URL(".", import.meta.url));
 export default defineConfig({
   main: {
     build: {
+      externalizeDeps: { include: ["playwright-core"] },
       rolldownOptions: {
-        input: { index: resolve(root, "src/main/app/index.ts") },
-        output: { format: "cjs", entryFileNames: "[name].cjs" },
+        input: {
+          index: resolve(root, "src/main/app/index.ts"),
+          "browser-worker": resolve(root, "src/main/workers/browser-worker.ts"),
+          "extension-relay": resolve(root, "src/main/workers/extension-relay.ts"),
+        },
+        output: {
+          format: "cjs",
+          entryFileNames: "[name].cjs",
+          chunkFileNames: "chunks/[name]-[hash].cjs",
+        },
       },
     },
   },

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ShoppingBag } from "lucide-react";
 import type { RuntimeInfo } from "../../shared/contracts/desktop.ts";
+import { BrowserConnectionPanel } from "../features/connections/BrowserConnectionPanel.tsx";
 
 export function App() {
   const [runtime, setRuntime] = useState<RuntimeInfo | null>(null);
@@ -34,10 +35,7 @@ export function App() {
         <h1>先连接你的日常浏览器</h1>
         <p>通过官方扩展接入 Chrome，在你选择的页面中读取商品与登录状态。</p>
       </section>
-      <section className="connection-section" aria-labelledby="connection-heading">
-        <h2 id="connection-heading">浏览器接入</h2>
-        <p>正在接入桌面扩展桥。完成验证后，可在这里连接并选择标签页。</p>
-      </section>
+      <BrowserConnectionPanel />
       <section className="runtime-section" aria-labelledby="runtime-heading">
         <h2 id="runtime-heading">本机状态</h2>
         {error && <p role="alert">{error}</p>}

@@ -2,6 +2,8 @@ import { isAbsolute, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { app, BrowserWindow, dialog } from "electron";
 import { registerDesktopIpc } from "../ipc/register-desktop-ipc.ts";
+import { registerBrowserIpc } from "../ipc/register-browser-ipc.ts";
+import { BrowserWorkerClient } from "../infrastructure/browser/browser-worker-client.ts";
 import { isTrustedRendererUrl, rendererContentSecurityPolicy } from "../ipc/renderer-access.ts";
 
 app.setName("CartPilot");
@@ -12,6 +14,7 @@ if (dataDirectory) {
 }
 
 let window: BrowserWindow | null = null;
+const browser = new BrowserWorkerClient();
 
 async function createWindow(): Promise<void> {
   const developmentUrl = app.isPackaged ? undefined : process.env.ELECTRON_RENDERER_URL;
@@ -52,6 +55,7 @@ async function createWindow(): Promise<void> {
     });
   });
   registerDesktopIpc(window, rendererUrl);
+  registerBrowserIpc(window, rendererUrl, browser);
   window.once("ready-to-show", () => window?.show());
   window.once("closed", () => {
     window = null;
@@ -62,6 +66,13 @@ async function createWindow(): Promise<void> {
 if (!app.requestSingleInstanceLock()) {
   app.quit();
 } else {
+  let isQuitting = false;
+  app.on("before-quit", (event) => {
+    if (isQuitting) return;
+    event.preventDefault();
+    isQuitting = true;
+    void browser.dispose().finally(() => app.quit());
+  });
   app.on("second-instance", () => {
     if (window?.isMinimized()) window.restore();
     window?.show();

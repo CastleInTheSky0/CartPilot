@@ -1,18 +1,10 @@
-import { app, ipcMain, type BrowserWindow } from "electron";
+import { app, type BrowserWindow } from "electron";
 import { z } from "zod";
 import { DESKTOP_CHANNELS, RuntimeInfoSchema } from "../../shared/contracts/desktop.ts";
-import { isTrustedRendererUrl } from "./renderer-access.ts";
+import { registerValidatedHandler } from "./validated-handler.ts";
 
 export function registerDesktopIpc(window: BrowserWindow, rendererUrl: string): void {
-  ipcMain.handle(DESKTOP_CHANNELS.runtime, (event, input: unknown) => {
-    if (
-      event.sender !== window.webContents ||
-      event.senderFrame !== window.webContents.mainFrame ||
-      !isTrustedRendererUrl(event.senderFrame.url, rendererUrl)
-    ) {
-      throw new Error("当前页面无权访问桌面接口。");
-    }
-    z.undefined().parse(input);
+  registerValidatedHandler(window, rendererUrl, DESKTOP_CHANNELS.runtime, z.undefined(), () => {
     return RuntimeInfoSchema.parse({
       version: app.getVersion(),
       electron: process.versions.electron,
@@ -22,5 +14,4 @@ export function registerDesktopIpc(window: BrowserWindow, rendererUrl: string): 
       isPackaged: app.isPackaged,
     });
   });
-  window.once("closed", () => ipcMain.removeHandler(DESKTOP_CHANNELS.runtime));
 }

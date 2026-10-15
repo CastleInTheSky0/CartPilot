@@ -1,0 +1,124 @@
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.heading h2 {
+  margin: 0;
+}
+.status {
+  color: var(--muted);
+  font-size: 13px;
+}
+.status[data-connected="true"] {
+  color: var(--accent);
+}
+.actions,
+.binding,
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.actions {
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+.actions button,
+.binding button,
+.rowActions button {
+  background: #fff;
+  color: inherit;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 9px 13px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.actions .primary,
+.binding .primary {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.actions summary {
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+.profile {
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.profile input {
+  min-width: 280px;
+}
+.binding {
+  align-items: end;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+.binding label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.binding select,
+.profile input {
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: white;
+  color: #242624;
+  font-size: 13px;
+}
+.tabSelect {
+  flex: 1;
+  min-width: 210px;
+}
+.tabSelect select {
+  width: 100%;
+}
+.tableWrap {
+  overflow-x: auto;
+}
+.tableWrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+.tableWrap th {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.tableWrap td {
+  padding: 13px 0;
+  border-bottom: 1px solid #e7e8e2;
+}
+.tableWrap td:nth-child(2) {
+  max-width: 230px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.tableWrap small {
+  display: block;
+  color: var(--muted);
+  margin-top: 4px;
+  font-size: 11px;
+}
+.rowActions {
+  gap: 8px;
+}
+.rowActions button {
+  padding: 5px 7px;
+  font-size: 12px;
+}

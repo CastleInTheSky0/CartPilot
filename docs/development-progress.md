@@ -13,7 +13,16 @@
 
 验证：`npm run desktop:build`、`npm run desktop:test`（2 项）、`npm run build` 通过。真实 Electron 启动测试确认无 Node 全局、preload 可用、sandbox 与 contextIsolation 生效，外部新窗口被拒绝。首次运行下载 Electron 耗时超出测试时限，下载完成后重跑通过。
 
-扩展工作进程、SQLite 与实际安装包尚待验证，M1 及 PRD 验收项均未标为完成。
+### 扩展桥与连接验证
+
+- 提取现有连接、端点校验和官方中继模块，旧服务使用兼容入口，保留固定 Playwright 1.64.1 与 `noDefaults` 语义。
+- Electron 使用 utilityProcess 管理连接，官方中继通过随包 Electron 的 Node 模式运行，不要求用户安装 Node 或 tsx。
+- 桌面支持安装入口、授权等待与取消、平台标签列表、显式接入、只读登录检测及定位页面。导航、关闭和断开会废弃接入状态；断开保留浏览器页面。
+- 主进程、preload 和工作进程的消息均经 schema 校验，不暴露脚本、Cookie、任意 URL 或购买接口。
+- `npm test` 72 项通过；`npm run desktop:test` 5 项通过；桌面和旧网页构建、行数检查通过。桌面测试覆盖真实 utilityProcess → Node 中继的扩展缺失回报；离线 Browser.bind → chromium.connect 覆盖接入、去跟踪、登录、互斥和断开。截图：`output/playwright/desktop.png`。
+- 为保持现有运行连接，未在用户日常 Chrome 中发起新授权；真实官方扩展授权与安装后的接入仍待实机记录，不以离线验证替代。
+
+SQLite 与实际安装包尚待验证，M1 及 PRD 验收项均未标为完成。
 
 ## 后续阶段
 
