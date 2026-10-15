@@ -19,7 +19,7 @@ npm run desktop:package   # 生成 Windows NSIS 安装包
 npm run desktop:verify-package  # PowerShell 7，隔离安装、测试并卸载
 ```
 
-桌面通过官方扩展连接普通 Chrome，按平台选择标签页。连接、接入与登录分别显示，导航或关闭后需要重新接入；断开保留 Chrome 页面。真实 Chrome 扩展授权仍待补充实机验证记录。
+桌面通过官方扩展连接普通 Chrome，按平台选择标签页。连接、接入与登录分别显示，导航或关闭后需要重新接入；断开保留 Chrome 页面。已修复本机 IPv6 回环受限导致的 `Failed to connect to MCP relay: WebSocket error`，中继改为优先 IPv4；隔离官方扩展的授权、接入和重连已验证，日常 Chrome 的实机只读验收仍待补充。更新后关闭旧授权页，重新连接并在新弹出的扩展页面授权。
 
 数据保存在 Electron userData 的 `cartpilot.sqlite`，可用绝对路径环境变量 `CARTPILOT_DATA_DIR` 指定隔离目录。除资料目录偏好与安装标识，存储层已支持通用任务与多笔订单。旧数据迁移具备原始文件及数据库备份、重复检测、冲突阻塞和冷却保留；目前尚未开放界面入口，也未迁移用户当前 `.data`。原服务继续使用原数据，浏览器资料与登录会话保留。
 

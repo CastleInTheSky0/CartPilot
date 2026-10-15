@@ -1,4 +1,5 @@
 /// <reference path="./playwright-bridge.d.ts" />
+import { setDefaultResultOrder } from "node:dns";
 import { tools } from "playwright-core/lib/coreBundle";
 import { version } from "playwright-core/package.json";
 import type { Browser } from "playwright";
@@ -33,6 +34,8 @@ export async function runOfficialRelay(): Promise<void> {
 
   try {
     if (version !== "1.64.1") throw new Error("bridge_version");
+    // 官方中继监听 localhost；部分 Windows 环境拒绝访问 ::1，只在中继进程优先 IPv4。
+    setDefaultResultOrder("ipv4first");
     const profileDirectory = z
       .string()
       .regex(/^(?:Default|Profile \d+)$/)

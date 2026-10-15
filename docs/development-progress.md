@@ -50,6 +50,16 @@ M1 尚缺用户日常 Chrome 中的官方扩展授权、接入与断开实机记
 - 真实 Electron 检查 1280、1120、760 宽度，无页面横向溢出；隔离 renderer fixture 补充已连接、长标题、登录异常及 390 宽度，刷新、接入、重新检测、定位和断开操作正常。未向用户日常 Chrome 发起授权。
 - 截图与隔离检查报告位于 `output/playwright/workspace-*.png`、`connected-fixture.png`、`ui-review.json`。本次更新本地桌面构建，之前的 M1 安装包未重新生成。
 
+### 扩展中继 WebSocket 连接修复
+
+- 用户在桌面开发版点击扩展授权后，遇到 `Failed to connect to MCP relay: WebSocket error`。在临时 Chromium 资料中加载已安装的官方扩展 0.4.0 复现：官方中继仍在监听，但 `localhost` 默认解析出的 IPv6 回环 `::1` 在本机访问时返回 `EACCES`。
+- 官方中继进程启动时使用 Node 的 DNS API 优先 IPv4，使官方服务监听 `127.0.0.1`。设置仅在独立中继进程生效，保留官方协议、授权及回环地址限制。
+- 新增打包回归：以 Electron 的 Node 模式加载实际构建的中继，在 IPv6 优先环境截获浏览器启动地址并进行真实 WebSocket 握手；不启动用户 Chrome，也不模拟浏览器协议。已确认修改前失败、修改后通过；该测试同样覆盖实际安装目录中的中继。
+- 开发构建的完整 Electron → utilityProcess → Node 中继 → 官方扩展链路，在临时 Chromium 资料和离线京东页面中通过两轮授权、列表、接入、登录读取、断开与重连。旧标签标识被拒绝，商品页仅请求一次，断开及退出应用后页面均保留。测试仅通过启动包装器指定隔离浏览器，不复制用户登录资料。
+- `npm run desktop:build`、`npm run desktop:test`（16 项）、旧版扩展回归（10 项）、严格类型及行数检查通过。隔离完整链路报告为 `output/playwright/extension-desktop-verification.json`，截图为 `extension-desktop-round-*.png`。
+- 已重新生成 `release/CartPilot-2.1.0-x64-Setup.exe`，通过 `npm run desktop:verify-package` 的 4 项实际安装后测试，覆盖 IPv4 WebSocket、桌面启动隔离、单实例和存储重启；验证副本已卸载。记录为 `output/packaging/a4f7ee72-b639-4399-8ac8-5c65954b0647/verification.json`。
+- 本次补齐隔离官方扩展授权记录；用户日常 Google Chrome 和真实商城页面的只读验收仍需重测，M1 与 PRD 整体验收保持未完成。
+
 ## M2：通用任务与订单内核（离线实现已落地）
 
 ### 通用契约与数量规则
