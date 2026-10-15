@@ -9,6 +9,7 @@ import {
 } from "../../shared/contracts/browser.ts";
 import { DESKTOP_CHANNELS } from "../../shared/contracts/desktop.ts";
 import type { BrowserWorkerClient } from "../infrastructure/browser/browser-worker-client.ts";
+import type { DesktopStore } from "../infrastructure/storage/desktop-store.ts";
 import { isTrustedRendererUrl } from "./renderer-access.ts";
 import { registerValidatedHandler } from "./validated-handler.ts";
 
@@ -16,6 +17,7 @@ export function registerBrowserIpc(
   window: BrowserWindow,
   rendererUrl: string,
   browser: BrowserWorkerClient,
+  store: DesktopStore,
 ): void {
   const state = async (command: BrowserCommand) => {
     const result = await browser.execute(command);
@@ -28,9 +30,13 @@ export function registerBrowserIpc(
     handle: (input: Input) => Output | Promise<Output>,
   ) => registerValidatedHandler(window, rendererUrl, channel, schema, handle);
   register(DESKTOP_CHANNELS.browserState, z.undefined(), () => state({ type: "status" }));
-  register(DESKTOP_CHANNELS.browserConnect, ConnectBrowserSchema, (input) =>
-    state({ type: "connect", input }),
+  register(DESKTOP_CHANNELS.browserPreferences, z.undefined(), () =>
+    store.readBrowserPreferences(),
   );
+  register(DESKTOP_CHANNELS.browserConnect, ConnectBrowserSchema, (input) => {
+    store.saveBrowserPreferences(input);
+    return state({ type: "connect", input });
+  });
   register(DESKTOP_CHANNELS.browserDisconnect, z.undefined(), () => state({ type: "disconnect" }));
   register(DESKTOP_CHANNELS.browserListTabs, PlatformSchema, async (platform) => {
     const result = await browser.execute({ type: "list", platform });

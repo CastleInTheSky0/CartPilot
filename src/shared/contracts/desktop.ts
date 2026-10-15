@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { StorageStatusSchema } from "./storage.ts";
 import type {
   BindBrowserTabInput,
   BrowserState,
@@ -10,6 +11,7 @@ import type {
 export const DESKTOP_CHANNELS = {
   runtime: "desktop:runtime",
   browserState: "browser:state",
+  browserPreferences: "browser:preferences",
   browserConnect: "browser:connect",
   browserDisconnect: "browser:disconnect",
   browserListTabs: "browser:list-tabs",
@@ -27,6 +29,7 @@ export const RuntimeInfoSchema = z.strictObject({
   node: z.string(),
   dataDirectory: z.string(),
   isPackaged: z.boolean(),
+  storage: StorageStatusSchema,
 });
 
 export type RuntimeInfo = z.infer<typeof RuntimeInfoSchema>;
@@ -34,6 +37,7 @@ export type RuntimeInfo = z.infer<typeof RuntimeInfoSchema>;
 export interface DesktopApi {
   getRuntimeInfo(): Promise<RuntimeInfo>;
   getBrowserState(): Promise<BrowserState>;
+  getBrowserPreferences(): Promise<ConnectBrowserInput>;
   connectBrowser(input: ConnectBrowserInput): Promise<BrowserState>;
   disconnectBrowser(): Promise<BrowserState>;
   listBrowserTabs(platform: Platform): Promise<BrowserTab[]>;

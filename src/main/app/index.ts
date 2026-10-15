@@ -4,6 +4,7 @@ import { app, BrowserWindow, dialog } from "electron";
 import { registerDesktopIpc } from "../ipc/register-desktop-ipc.ts";
 import { registerBrowserIpc } from "../ipc/register-browser-ipc.ts";
 import { BrowserWorkerClient } from "../infrastructure/browser/browser-worker-client.ts";
+import { openDesktopStore, type DesktopStore } from "../infrastructure/storage/desktop-store.ts";
 import { isTrustedRendererUrl, rendererContentSecurityPolicy } from "../ipc/renderer-access.ts";
 
 app.setName("CartPilot");
@@ -15,8 +16,15 @@ if (dataDirectory) {
 
 let window: BrowserWindow | null = null;
 const browser = new BrowserWorkerClient();
+let store: DesktopStore | null = null;
 
 async function createWindow(): Promise<void> {
+  store = openDesktopStore(
+    app.getPath("userData"),
+    app.isPackaged
+      ? join(process.resourcesPath, "migrations")
+      : join(app.getAppPath(), "migrations"),
+  );
   const developmentUrl = app.isPackaged ? undefined : process.env.ELECTRON_RENDERER_URL;
   const rendererUrl =
     developmentUrl ?? pathToFileURL(join(__dirname, "../renderer/index.html")).href;
@@ -54,8 +62,8 @@ async function createWindow(): Promise<void> {
       },
     });
   });
-  registerDesktopIpc(window, rendererUrl);
-  registerBrowserIpc(window, rendererUrl, browser);
+  registerDesktopIpc(window, rendererUrl, store);
+  registerBrowserIpc(window, rendererUrl, browser, store);
   window.once("ready-to-show", () => window?.show());
   window.once("closed", () => {
     window = null;
@@ -71,7 +79,13 @@ if (!app.requestSingleInstanceLock()) {
     if (isQuitting) return;
     event.preventDefault();
     isQuitting = true;
-    void browser.dispose().finally(() => app.quit());
+    void browser
+      .dispose()
+      .catch(() => {})
+      .finally(() => {
+        store?.close();
+        app.quit();
+      });
   });
   app.on("second-instance", () => {
     if (window?.isMinimized()) window.restore();

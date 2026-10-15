@@ -56,6 +56,12 @@ export function App() {
               <dt>数据位置</dt>
               <dd>{runtime.dataDirectory}</dd>
             </div>
+            <div>
+              <dt>本地数据库</dt>
+              <dd>
+                SQLite {runtime.storage.sqliteVersion} · 迁移版本 {runtime.storage.schemaVersion}
+              </dd>
+            </div>
           </dl>
         )}
       </section>

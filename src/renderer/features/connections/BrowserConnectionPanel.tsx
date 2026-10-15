@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { PlatformSchema } from "../../../shared/contracts/browser.ts";
 import { useBrowserConnection } from "./useBrowserConnection.ts";
 import styles from "./connections.module.css";
@@ -19,7 +18,7 @@ const CONNECTION_LABELS = {
 
 export function BrowserConnectionPanel() {
   const connection = useBrowserConnection();
-  const [profile, setProfile] = useState("");
+  const { profile, setProfile } = connection;
   const phase = connection.state?.connection.phase ?? "disconnected";
   const isConnected = phase === "connected";
   const isConnecting = phase === "connecting";

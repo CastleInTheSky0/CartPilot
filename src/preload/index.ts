@@ -21,6 +21,11 @@ const api: DesktopApi = {
   async getBrowserState() {
     return BrowserStateSchema.parse(await ipcRenderer.invoke(DESKTOP_CHANNELS.browserState));
   },
+  async getBrowserPreferences() {
+    return ConnectBrowserSchema.parse(
+      await ipcRenderer.invoke(DESKTOP_CHANNELS.browserPreferences),
+    );
+  },
   async connectBrowser(input) {
     return BrowserStateSchema.parse(
       await ipcRenderer.invoke(DESKTOP_CHANNELS.browserConnect, ConnectBrowserSchema.parse(input)),

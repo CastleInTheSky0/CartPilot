@@ -10,6 +10,7 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "dev": "concurrently -k \"tsx watch server/index.ts\" \"vite --host 127.0.0.1\"",
     "prebuild": "npm run check:lines",
     "build": "tsc --noEmit && vite build",
@@ -20,11 +21,14 @@
     "desktop:build": "npm run check:lines && npm run desktop:check && electron-vite build",
     "desktop:start": "electron .",
     "desktop:test": "tsx --test --test-concurrency=1 tests/unit/*.test.ts tests/packaging/*.test.ts",
+    "db:generate": "drizzle-kit generate",
     "check:lines": "node scripts/check-file-lines.mjs",
     "check:lines:strict": "node scripts/check-file-lines.mjs --strict",
     "browser:install": "playwright install chromium --no-shell"
   },
   "dependencies": {
+    "better-sqlite3": "13.0.3",
+    "drizzle-orm": "0.45.4",
     "express": "^5.3.0",
     "lucide-react": "^1.57.0",
     "playwright": "1.64.1",
@@ -33,11 +37,13 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "9.6.0",
     "@types/express": "^5.0.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "concurrently": "^9.2.0",
+    "drizzle-kit": "0.31.11",
     "electron": "44.7.2",
     "electron-builder": "26.15.3",
     "electron-vite": "6.0.0",

@@ -1,9 +1,14 @@
 import { app, type BrowserWindow } from "electron";
 import { z } from "zod";
 import { DESKTOP_CHANNELS, RuntimeInfoSchema } from "../../shared/contracts/desktop.ts";
+import type { DesktopStore } from "../infrastructure/storage/desktop-store.ts";
 import { registerValidatedHandler } from "./validated-handler.ts";
 
-export function registerDesktopIpc(window: BrowserWindow, rendererUrl: string): void {
+export function registerDesktopIpc(
+  window: BrowserWindow,
+  rendererUrl: string,
+  store: DesktopStore,
+): void {
   registerValidatedHandler(window, rendererUrl, DESKTOP_CHANNELS.runtime, z.undefined(), () => {
     return RuntimeInfoSchema.parse({
       version: app.getVersion(),
@@ -12,6 +17,7 @@ export function registerDesktopIpc(window: BrowserWindow, rendererUrl: string): 
       node: process.versions.node,
       dataDirectory: app.getPath("userData"),
       isPackaged: app.isPackaged,
+      storage: store.status(),
     });
   });
 }

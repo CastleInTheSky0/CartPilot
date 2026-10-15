@@ -22,7 +22,15 @@
 - `npm test` 72 项通过；`npm run desktop:test` 5 项通过；桌面和旧网页构建、行数检查通过。桌面测试覆盖真实 utilityProcess → Node 中继的扩展缺失回报；离线 Browser.bind → chromium.connect 覆盖接入、去跟踪、登录、互斥和断开。截图：`output/playwright/desktop.png`。
 - 为保持现有运行连接，未在用户日常 Chrome 中发起新授权；真实官方扩展授权与安装后的接入仍待实机记录，不以离线验证替代。
 
-SQLite 与实际安装包尚待验证，M1 及 PRD 验收项均未标为完成。
+### SQLite 与持久化验证
+
+- 固定 better-sqlite3 13.0.3、Drizzle ORM 0.45.4、Drizzle Kit 0.31.11；使用稳定版本，未采用官网当前示例的 RC。
+- 接入官方 Drizzle 迁移，数据库保存在 Electron userData，启用 WAL、FULL 同步、外键和 busy timeout。启动校验数据库及设置，退出关闭连接。
+- 保存 Chrome 资料目录偏好与安装标识；不保存令牌、标签页 ID 或浏览器会话，不读写旧 `.data`。
+- `postinstall` 使用 electron-builder 为 Electron ABI 重建原生依赖，已在 Windows x64 成功装载。
+- `npm run desktop:build` 和 `npm run desktop:test` 6 项通过，新增真实 Electron 原生模块迁移、关闭、重启、设置持久化及不重复迁移测试；重启保持未连接，不自动授权浏览器。
+
+实际安装包尚待验证，M1 及 PRD 验收项均未标为完成。
 
 ## 后续阶段
 

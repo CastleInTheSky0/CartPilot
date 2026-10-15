@@ -8,6 +8,7 @@ export function useBrowserConnection() {
   const [platform, setPlatform] = useState<Platform>("jd");
   const [tabs, setTabs] = useState<BrowserTab[]>([]);
   const [tabId, setTabId] = useState("");
+  const [profile, setProfile] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -20,6 +21,14 @@ export function useBrowserConnection() {
       },
       () => {
         if (active) setError("无法读取浏览器状态，请重新启动应用。");
+      },
+    );
+    void window.cartPilot.getBrowserPreferences().then(
+      (value) => {
+        if (active) setProfile(value.profileDirectory ?? "");
+      },
+      () => {
+        if (active) setError("无法读取已保存的 Chrome 资料目录。");
       },
     );
     return () => {
@@ -47,6 +56,8 @@ export function useBrowserConnection() {
 
   return {
     state,
+    profile,
+    setProfile,
     error,
     busy,
     platform,
