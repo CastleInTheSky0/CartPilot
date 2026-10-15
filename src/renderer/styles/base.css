@@ -1,12 +1,24 @@
 :root {
-  font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
-  color: #242624;
-  background: #f6f6f4;
+  font-family:
+    "DM Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Microsoft YaHei",
+    sans-serif;
+  color: #f0f1eb;
+  background: #151717;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --muted: #6a6d67;
-  --line: #ddded8;
-  --accent: #36634d;
+  color-scheme: dark;
+  --accent: #d4f879;
+  --accent-ink: #202b16;
+  --muted: #868d87;
+  --text-secondary: #b7beb2;
+  --border: #303431;
+  --surface: #1e2120;
+  --bg: #151717;
+  --warning: #e3bf7b;
 }
 
 * {
@@ -14,6 +26,7 @@
 }
 body {
   margin: 0;
+  min-width: 360px;
 }
 button,
 input,
@@ -22,93 +35,133 @@ select {
 }
 button {
   cursor: pointer;
+  color: inherit;
+  transition:
+    background 160ms,
+    border-color 160ms,
+    color 160ms;
 }
 button:disabled {
-  cursor: default;
-  opacity: 0.55;
+  cursor: not-allowed;
+  opacity: 0.42;
 }
 button:focus-visible,
-select:focus-visible,
-input:focus-visible {
+summary:focus-visible,
+input:focus-visible,
+select:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  outline-offset: 4px;
 }
-.workspace {
-  max-width: 1080px;
-  padding: 0 44px;
-  margin: auto;
-}
-.app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 84px;
-  border-bottom: 1px solid var(--line);
-}
-.brand {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  font-size: 22px;
-  letter-spacing: -0.5px;
-}
-.stage,
-.eyebrow {
-  color: var(--muted);
-  font-size: 13px;
-}
-.intro {
-  padding: 36px 0 24px;
-}
-h1 {
-  font-size: 29px;
-  margin: 10px 0;
-  font-weight: 600;
-  letter-spacing: -0.7px;
-}
-h2 {
-  font-size: 17px;
-  font-weight: 600;
-  margin: 0 0 18px;
-}
+h1,
+h2,
+h3,
 p {
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.7;
-}
-.connection-section,
-.runtime-section {
-  padding: 24px 0;
-  border-top: 1px solid var(--line);
-}
-dl {
   margin: 0;
-  font-size: 13px;
 }
-dl > div {
-  display: flex;
-  gap: 24px;
-  padding: 7px 0;
+svg {
+  flex-shrink: 0;
+  stroke-width: 1.6;
 }
-dt {
-  min-width: 80px;
-  color: var(--muted);
+::selection {
+  background: #d4f87940;
 }
-dd {
-  margin: 0;
-  overflow-wrap: anywhere;
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
 }
-footer {
-  color: var(--muted);
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #414b3b;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #647458;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+input,
+select {
+  color: #ecefe7;
+  background: #151817;
+  border: 1px solid #394037;
+  border-radius: 5px;
+  min-height: 38px;
+  padding: 9px 11px;
   font-size: 12px;
-  padding: 24px 0;
 }
-[role="alert"] {
-  color: #994d39;
+input::placeholder {
+  color: #727c6e;
 }
-
-@media (max-width: 800px) {
-  .workspace {
-    padding: 0 26px;
+input:disabled,
+select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 37px;
+  padding: 9px 13px;
+  border: 1px solid #3a4334;
+  border-radius: 5px;
+  background: #252c22;
+  color: #d0d8c9;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.button:hover:not(:disabled) {
+  background: #313b2b;
+  border-color: #6b7c5b;
+}
+.button.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.button.primary:hover:not(:disabled) {
+  background: #e2ffa2;
+  border-color: #e2ffa2;
+}
+.button.subtle {
+  background: transparent;
+  border-color: transparent;
+  color: #98a58d;
+}
+.button.subtle:hover:not(:disabled) {
+  background: #252c22;
+  color: #d0d8c9;
+  border-color: transparent;
+}
+.section-number {
+  padding: 3px 5px;
+  border: 1px solid #424e39;
+  border-radius: 3px;
+  color: #9ba98c;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+.spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }

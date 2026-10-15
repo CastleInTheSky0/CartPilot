@@ -96,3 +96,5 @@ export function useBrowserConnection() {
       }),
   };
 }
+
+export type BrowserConnection = ReturnType<typeof useBrowserConnection>;

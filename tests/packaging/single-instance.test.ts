@@ -34,7 +34,7 @@ test("同一数据目录的第二实例退出，原实例继续运行", { timeou
     });
     assert.equal(exitCode, 0);
     assert.equal(first.windows().length, 1);
-    await page.getByRole("heading", { name: "先连接你的日常浏览器" }).waitFor();
+    await page.getByRole("heading", { name: "购买工作台", exact: true }).waitFor();
   } finally {
     await first.close();
   }

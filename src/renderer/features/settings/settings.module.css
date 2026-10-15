@@ -1,0 +1,75 @@
+.settings {
+  max-width: 900px;
+}
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #a8bc96;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--border);
+}
+.heading h2 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #d7dece;
+}
+.heading > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 11px;
+}
+.settings dl {
+  margin: 0;
+}
+.settings dl > div {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  padding: 24px 0;
+  gap: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.settings dt {
+  display: flex;
+  align-items: center;
+  align-self: start;
+  gap: 7px;
+  color: #a2af98;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.settings dd {
+  margin: 0;
+  color: #d6ddcf;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.settings small {
+  display: block;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.path {
+  overflow-wrap: anywhere;
+}
+.note,
+.loading,
+.error {
+  margin-top: 20px;
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+.error {
+  color: var(--warning);
+}
+@media (max-width: 600px) {
+  .settings dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 9px;
+  }
+}

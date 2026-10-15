@@ -1,0 +1,84 @@
+.guide {
+  max-width: 900px;
+}
+.intro {
+  padding: 24px;
+  background: #1d241b;
+  border: 1px solid #36432d;
+  border-radius: 8px;
+}
+.intro h2 {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 14px 0 10px;
+}
+.intro p {
+  color: #9dac91;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0 0;
+}
+.steps li {
+  display: flex;
+  gap: 21px;
+  padding: 27px 0;
+  border-bottom: 1px solid var(--border);
+}
+.icon {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+  background: #232b1f;
+  border: 1px solid #3b4633;
+  border-radius: 8px;
+  color: #b6ca9f;
+}
+.stepNumber {
+  color: #91a380;
+  font-size: 9px;
+  letter-spacing: 1.2px;
+}
+.steps h3 {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 8px 0 10px;
+}
+.steps p {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.9;
+}
+.steps small {
+  display: block;
+  color: #828f78;
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 7px;
+}
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 23px;
+}
+.bottom p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.9;
+}
+@media (max-width: 600px) {
+  .steps li {
+    gap: 14px;
+  }
+  .bottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

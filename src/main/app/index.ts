@@ -31,12 +31,12 @@ async function createWindow(): Promise<void> {
   const rendererUrl =
     developmentUrl ?? pathToFileURL(join(__dirname, "../renderer/index.html")).href;
   window = new BrowserWindow({
-    width: 1120,
-    height: 780,
+    width: 1280,
+    height: 860,
     minWidth: 760,
     minHeight: 600,
     title: "CartPilot",
-    backgroundColor: "#f6f6f4",
+    backgroundColor: "#151717",
     show: false,
     autoHideMenuBar: true,
     webPreferences: {

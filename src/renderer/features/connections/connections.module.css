@@ -1,124 +1,197 @@
-.heading {
+.panel {
+  min-width: 0;
+  padding: 21px 23px 17px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+.heading,
+.heading h2,
+.status,
+.actions,
+.browserIntro,
+.bindingHeading,
+.bindAction {
   display: flex;
   align-items: center;
+}
+.heading {
   justify-content: space-between;
+  gap: 12px;
 }
 .heading h2 {
-  margin: 0;
-}
-.status {
-  color: var(--muted);
+  gap: 9px;
   font-size: 13px;
-}
-.status[data-connected="true"] {
-  color: var(--accent);
-}
-.actions,
-.binding,
-.rowActions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.actions {
-  margin: 20px 0;
-  flex-wrap: wrap;
-}
-.actions button,
-.binding button,
-.rowActions button {
-  background: #fff;
-  color: inherit;
-  border: 1px solid var(--line);
-  border-radius: 5px;
-  padding: 9px 13px;
-  font-size: 13px;
+  font-weight: 500;
   white-space: nowrap;
 }
-.actions .primary,
-.binding .primary {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-}
-.actions summary {
-  color: var(--muted);
-  font-size: 12px;
-  cursor: pointer;
-}
-.profile {
-  margin-top: 10px;
-  display: grid;
+.status {
   gap: 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
 }
-.profile input {
-  min-width: 280px;
+.status i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
 }
-.binding {
-  align-items: end;
-  margin: 24px 0;
+.status[data-phase="connected"] {
+  color: var(--accent);
+}
+.status[data-phase="connecting"],
+.status[data-phase="error"] {
+  color: var(--warning);
+}
+.browserIntro {
+  margin: 27px 0 20px;
+  gap: 12px;
+}
+.browserIcon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #3d4935;
+  border-radius: 10px;
+  background: #283023;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.browserIntro h3 {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+.browserIntro p {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.extensionTag {
+  margin-left: auto;
+  padding: 4px 7px;
+  border: 1px solid #394132;
+  border-radius: 4px;
+  color: #a6b598;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.actions {
+  gap: 8px;
   flex-wrap: wrap;
 }
-.binding label {
-  display: grid;
-  gap: 7px;
+.message,
+.error {
+  margin-top: 12px;
   color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.message[data-error="true"],
+.error {
+  color: var(--warning);
+}
+.binding {
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+.bindingHeading {
+  gap: 7px;
+  color: #adbba0;
+}
+.bindingHeading h3 {
+  color: #d5dccd;
+  font-weight: 500;
   font-size: 12px;
 }
-.binding select,
-.profile input {
-  padding: 9px;
-  border: 1px solid var(--line);
-  border-radius: 5px;
-  background: white;
-  color: #242624;
-  font-size: 13px;
+.bindingHeading button {
+  margin-left: auto;
+  font-size: 11px;
+  min-height: 28px;
+  padding: 5px;
+}
+.picker {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.picker label,
+.profile label {
+  display: grid;
+  gap: 8px;
+  color: #a6afa0;
+  font-size: 11px;
+  min-width: 0;
+}
+.platformSelect {
+  width: 132px;
+  flex-shrink: 0;
 }
 .tabSelect {
   flex: 1;
-  min-width: 210px;
 }
-.tabSelect select {
+.picker select {
   width: 100%;
-}
-.tableWrap {
-  overflow-x: auto;
-}
-.tableWrap table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  text-align: left;
-}
-.tableWrap th {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 400;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line);
-}
-.tableWrap td {
-  padding: 13px 0;
-  border-bottom: 1px solid #e7e8e2;
-}
-.tableWrap td:nth-child(2) {
-  max-width: 230px;
   text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 }
-.tableWrap small {
-  display: block;
+.bindAction {
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+}
+.bindAction > span {
   color: var(--muted);
-  margin-top: 4px;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.bindAction button {
+  min-height: 32px;
   font-size: 11px;
+  padding: 7px 10px;
 }
-.rowActions {
-  gap: 8px;
+.profile {
+  margin-top: 17px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--muted);
 }
-.rowActions button {
-  padding: 5px 7px;
-  font-size: 12px;
+.profile summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.profile label {
+  margin-top: 12px;
+}
+.profile input {
+  width: 100%;
+}
+.profile p {
+  margin-top: 8px;
+  line-height: 1.7;
+}
+@media (max-width: 1050px) {
+  .extensionTag {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .panel {
+    padding: 18px;
+  }
+  .picker {
+    flex-wrap: wrap;
+  }
+  .platformSelect,
+  .tabSelect {
+    width: 100%;
+    flex-basis: 100%;
+  }
+  .bindAction {
+    align-items: flex-start;
+  }
 }
