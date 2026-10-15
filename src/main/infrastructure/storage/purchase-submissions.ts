@@ -25,6 +25,7 @@ export class PurchaseSubmissions {
     const evidence = CheckoutEvidenceSchema.parse(input);
     return this.records.atomic(() => {
       const intent = this.records.getIntent(intentId);
+      this.records.assertExecutionAllowed(intent.platform);
       this.records.activeRun(intent.runId);
       const prior = this.records.db
         .select()

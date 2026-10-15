@@ -73,3 +73,13 @@ export const purchaseEvents = sqliteTable("purchase_events", {
   detail: text("detail").notNull(),
   at: text("at").notNull(),
 });
+
+export const legacyImports = sqliteTable("legacy_imports", {
+  sourceId: text("source_id").primaryKey(),
+  record: text("record").notNull(),
+});
+
+export const accessRestrictions = sqliteTable("access_restrictions", {
+  family: text("family").primaryKey(),
+  record: text("record").notNull(),
+});

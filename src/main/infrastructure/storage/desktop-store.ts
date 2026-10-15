@@ -14,9 +14,13 @@ import { StorageStatusSchema, type StorageStatus } from "../../../shared/contrac
 import { desktopSettings } from "./schema.ts";
 import type { PurchaseStore } from "../../application/purchase-store.ts";
 import { createPurchaseStore } from "./purchase-store.ts";
+import type { LegacyDataStore } from "../../application/legacy-data-store.ts";
+import { createLegacyDataStore } from "./legacy-data-store.ts";
+import { PurchaseRecords } from "./purchase-records.ts";
 
 export interface DesktopStore {
   purchases: PurchaseStore;
+  legacy: LegacyDataStore;
   status(): StorageStatus;
   readBrowserPreferences(): ConnectBrowserInput;
   saveBrowserPreferences(input: ConnectBrowserInput): void;
@@ -72,6 +76,7 @@ export function openDesktopStore(dataDirectory: string, migrationsDirectory: str
 
     return {
       purchases: createPurchaseStore(database, db),
+      legacy: createLegacyDataStore(new PurchaseRecords(database, db, Date.now), dataDirectory),
       status(): StorageStatus {
         return { ...status };
       },

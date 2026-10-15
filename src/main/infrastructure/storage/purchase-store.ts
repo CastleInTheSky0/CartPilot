@@ -49,6 +49,7 @@ export function createPurchaseStore(
     getTask: (taskId) => records.getTask(taskId),
     startRun(taskId) {
       return records.atomic(() => {
+        records.assertExecutionAllowed();
         const task = records.getTask(taskId);
         if (purchaseProgress(task.definition, records.listIntents(taskId)).isComplete)
           throw new PurchaseError("target_complete", "任务目标已完成；新一批购买请另建任务。");
@@ -81,6 +82,7 @@ export function createPurchaseStore(
         const task = records.getTask(run.taskId).definition;
         const candidate = task.candidates.find((item) => item.id === request.candidateId);
         if (!candidate) throw new PurchaseError("candidate_missing", "候选不属于当前任务。");
+        records.assertExecutionAllowed(candidate.platform);
         const usage = records.listIntents(run.taskId);
         const quantity = reservationQuantity(
           task,

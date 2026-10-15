@@ -4,6 +4,11 @@ import { eq } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { z } from "zod";
 import {
+  AccessRestrictionSchema,
+  LegacyImportSchema,
+} from "../../../shared/contracts/legacy-import.ts";
+import type { Platform } from "../../../shared/contracts/browser.ts";
+import {
   PurchaseIntentSchema,
   PurchaseOrderSchema,
   PurchaseRunSchema,
@@ -18,6 +23,8 @@ import {
 import { PurchaseError } from "../../domain/purchase-error.ts";
 import {
   checkoutLocks,
+  accessRestrictions,
+  legacyImports,
   purchaseEvents,
   purchaseIntents,
   purchaseOrders,
@@ -38,6 +45,32 @@ export class PurchaseRecords {
 
   timestamp(): string {
     return new Date(this.now()).toISOString();
+  }
+
+  assertExecutionAllowed(platform?: Platform): void {
+    for (const row of this.db.select().from(legacyImports).all()) {
+      const record = LegacyImportSchema.parse(JSON.parse(row.record));
+      if (record.sourceId !== row.sourceId || record.issues.length > 0)
+        throw new PurchaseError(
+          "legacy_review_required",
+          "旧数据存在配置冲突或未核对的提交记录，请先完成迁移核对。",
+        );
+    }
+    if (platform) {
+      const family = platform === "tmall" ? "taobao" : platform;
+      const row = this.db
+        .select()
+        .from(accessRestrictions)
+        .where(eq(accessRestrictions.family, family))
+        .get();
+      if (row) {
+        AccessRestrictionSchema.parse(JSON.parse(row.record));
+        throw new PurchaseError(
+          "access_restricted",
+          "当前平台保留访问限制；冷却结束后仍须检查页面并明确继续。",
+        );
+      }
+    }
   }
 
   createTask(input: PurchaseTaskDefinition) {

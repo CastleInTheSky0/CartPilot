@@ -2,7 +2,7 @@
 
 AI 多平台抢购助手。
 
-正在按 [Trellis PRD](.trellis/tasks/10-15-generic-purchase-desktop/prd.md) 开发通用购买助手。当前已交付 M1 桌面技术验证：Electron 分层入口、普通 Chrome 扩展桥、只读标签接入、SQLite 设置持久化与 Windows NSIS 验证包。通用商品、多任务、订单内核和模型接入将在后续阶段迁移；完整进展见 [开发进展](docs/development-progress.md)。
+正在按 [Trellis PRD](.trellis/tasks/10-15-generic-purchase-desktop/prd.md) 开发通用购买助手。已有 Electron 分层入口、普通 Chrome 扩展桥、只读标签接入、SQLite 与 Windows NSIS 验证包，M1 真实 Chrome 授权接入仍待验收。M2 已实现通用任务、配额预算事务、多笔订单、取消恢复和旧数据迁移的离线内核；工作台与通用平台执行接口将在后续阶段接入。完整进展见 [开发进展](docs/development-progress.md)。
 
 ## Electron 桌面验证版
 
@@ -14,13 +14,14 @@ npm run desktop:dev       # 开发窗口，独立使用 5174 端口
 npm run desktop:build
 npm run desktop:start     # 启动构建后的桌面
 npm run desktop:test      # 隔离测试，需要已安装测试用 Chromium
+npm run desktop:test:storage # Electron 原生 SQLite、双进程并发、状态机与迁移测试
 npm run desktop:package   # 生成 Windows NSIS 安装包
 npm run desktop:verify-package  # PowerShell 7，隔离安装、测试并卸载
 ```
 
 桌面通过官方扩展连接普通 Chrome，按平台选择标签页。连接、接入与登录分别显示，导航或关闭后需要重新接入；断开保留 Chrome 页面。真实 Chrome 扩展授权仍待补充实机验证记录。
 
-数据保存在 Electron userData 的 `cartpilot.sqlite`，可用绝对路径环境变量 `CARTPILOT_DATA_DIR` 指定隔离目录。当前仅保存资料目录偏好与安装标识，旧 `.data` 的配置、订单和冷却记录尚未迁移，仍由原服务使用。
+数据保存在 Electron userData 的 `cartpilot.sqlite`，可用绝对路径环境变量 `CARTPILOT_DATA_DIR` 指定隔离目录。除资料目录偏好与安装标识，存储层已支持通用任务与多笔订单。旧数据迁移具备原始文件及数据库备份、重复检测、冲突阻塞和冷却保留；目前尚未开放界面入口，也未迁移用户当前 `.data`。原服务继续使用原数据，浏览器资料与登录会话保留。
 
 ## 保留的旧版：Duo 首发助手
 

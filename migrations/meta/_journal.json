@@ -15,6 +15,13 @@
       "when": 1792066852020,
       "tag": "0001_purchase-ledger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792067716205,
+      "tag": "0002_legacy-import",
+      "breakpoints": true
     }
   ]
 }

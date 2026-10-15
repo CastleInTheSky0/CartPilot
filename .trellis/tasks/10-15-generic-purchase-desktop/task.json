@@ -31,8 +31,8 @@
   "meta": {
     "handoff_stage": "implementation",
     "implementation_gate": "authorized_by_user_2026_10_15",
-    "current_milestone": "M2",
-    "implementation_checkpoint": "M1 实机 Chrome 授权接入待验收；M2 通用契约、事务订单及 XState 取消恢复已落地，19 项集成测试通过；继续旧数据迁移",
+    "current_milestone": "M3",
+    "implementation_checkpoint": "M2 通用契约、事务订单、XState 与旧数据迁移离线内核已落地，27 项集成测试通过；下一步接入 M3 工作台。M1 实机 Chrome 授权接入仍待验收",
     "open_questions": "",
     "resolved_questions": "Q01,Q02,Q03,Q04,Q05",
     "source": "grill-me",
