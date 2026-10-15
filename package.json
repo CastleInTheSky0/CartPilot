@@ -2,14 +2,24 @@
   "name": "duo-launch-assistant",
   "version": "2.1.0",
   "private": true,
+  "description": "CartPilot 通用购买助手桌面应用",
+  "author": "Sylvan",
+  "main": "out/main/index.cjs",
   "type": "module",
-  "engines": { "node": ">=22.12.0" },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "concurrently -k \"tsx watch server/index.ts\" \"vite --host 127.0.0.1\"",
     "prebuild": "npm run check:lines",
     "build": "tsc --noEmit && vite build",
     "start": "tsx server/index.ts --open",
     "test": "tsx --test --test-concurrency=1 tests/*.test.ts",
+    "desktop:dev": "electron-vite dev",
+    "desktop:check": "tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.web.json --noEmit",
+    "desktop:build": "npm run check:lines && npm run desktop:check && electron-vite build",
+    "desktop:start": "electron .",
+    "desktop:test": "tsx --test --test-concurrency=1 tests/unit/*.test.ts tests/packaging/*.test.ts",
     "check:lines": "node scripts/check-file-lines.mjs",
     "check:lines:strict": "node scripts/check-file-lines.mjs --strict",
     "browser:install": "playwright install chromium --no-shell"
@@ -19,7 +29,8 @@
     "lucide-react": "^1.57.0",
     "playwright": "1.64.1",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
@@ -27,6 +38,10 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "concurrently": "^9.2.0",
+    "electron": "44.7.2",
+    "electron-builder": "26.15.3",
+    "electron-vite": "6.0.0",
+    "prettier": "3.9.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.4"

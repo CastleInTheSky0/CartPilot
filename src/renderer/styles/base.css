@@ -1,0 +1,114 @@
+:root {
+  font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+  color: #242624;
+  background: #f6f6f4;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --muted: #6a6d67;
+  --line: #ddded8;
+  --accent: #36634d;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.workspace {
+  max-width: 1080px;
+  padding: 0 44px;
+  margin: auto;
+}
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 84px;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+}
+.stage,
+.eyebrow {
+  color: var(--muted);
+  font-size: 13px;
+}
+.intro {
+  padding: 36px 0 24px;
+}
+h1 {
+  font-size: 29px;
+  margin: 10px 0;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+}
+h2 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 18px;
+}
+p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.connection-section,
+.runtime-section {
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+dl {
+  margin: 0;
+  font-size: 13px;
+}
+dl > div {
+  display: flex;
+  gap: 24px;
+  padding: 7px 0;
+}
+dt {
+  min-width: 80px;
+  color: var(--muted);
+}
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+footer {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 24px 0;
+}
+[role="alert"] {
+  color: #994d39;
+}
+
+@media (max-width: 800px) {
+  .workspace {
+    padding: 0 26px;
+  }
+}

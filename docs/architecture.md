@@ -2,7 +2,7 @@
 
 版本：1.5（补充模型供应商接入建议）  
 更新日期：2026-10-15  
-需求依据：[需求文档](./requirements.md)。Trellis 的 [任务 PRD](../.trellis/tasks/10-15-generic-purchase-desktop/prd.md) 汇总已确认范围；Q01–Q05 均已确认并回填，任务仍保持 planning。本文的框架与实现组织属于推荐方案，仍需技术验证，不代表已实现或已验证的 Electron 集成。
+需求依据：[需求文档](./requirements.md)。Trellis 的 [任务 PRD](../.trellis/tasks/10-15-generic-purchase-desktop/prd.md) 汇总已确认范围；用户已授权开始实施，当前推进 M1。本文的推荐方案仍需逐项验证，已实现内容及证据见 [开发进展](./development-progress.md)。
 
 ## 1. 技术路线
 
