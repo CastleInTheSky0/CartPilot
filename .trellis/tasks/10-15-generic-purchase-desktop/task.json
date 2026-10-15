@@ -1,0 +1,38 @@
+{
+  "id": "generic-purchase-desktop",
+  "name": "generic-purchase-desktop",
+  "title": "通用抢购助手 Electron 改造",
+  "description": "将已确认的 grill-me 结论交接为 Windows Electron 与普通 Chrome 扩展的通用抢购工具任务；Q01-Q05 均已确认，当前仅完成 PRD 与交接，不启动实现。",
+  "status": "planning",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "Sylvan",
+  "assignee": "Sylvan",
+  "createdAt": "2026-10-15",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "docs/requirements.md",
+    "docs/architecture.md",
+    "docs/engineering-standards.md",
+    "AGENTS.md"
+  ],
+  "notes": "仅 task/PRD 交接和需求澄清。Q01-Q05 均已确认，D19 补充 Gemini、DeepSeek、Kimi、豆包首版支持清单；结论与逐家验收已回填 PRD。保持 planning，等待用户后续实施指令。任务由已安装 Trellis 0.6.16 官方脚本创建，未执行完整项目初始化。创建交接时尚无 Git 仓库；当前已连接 CastleInTheSky0/CartPilot，本次依用户要求提交同步现有代码与文档基线，base_branch 为 main，尚无实施分支或实现提交。",
+  "meta": {
+    "handoff_stage": "prd_only",
+    "implementation_gate": "awaiting_implementation_request",
+    "open_questions": "",
+    "resolved_questions": "Q01,Q02,Q03,Q04,Q05",
+    "source": "grill-me",
+    "trellis_version": "0.6.16"
+  }
+}

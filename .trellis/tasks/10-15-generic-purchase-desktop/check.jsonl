@@ -1,0 +1,5 @@
+{"file": ".trellis/tasks/10-15-generic-purchase-desktop/prd.md", "reason": "Current task scope, resolved Q01-Q05, acceptance criteria and planning-only restriction"}
+{"file": "docs/requirements.md", "reason": "D01-D19 and existing behavior; suggestions remain subordinate to the task PRD"}
+{"file": "docs/architecture.md", "reason": "Technical candidates and migration risks only; no additional product scope"}
+{"file": "docs/engineering-standards.md", "reason": "Directory boundaries, TypeScript conventions and 400-line rule"}
+{"file": "AGENTS.md", "reason": "Repository-wide development constraints"}
