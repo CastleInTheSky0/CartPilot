@@ -1,0 +1,94 @@
+.panel {
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+  padding-top: 22px;
+}
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 24px;
+}
+.heading h3 {
+  font-size: 15px;
+  font-weight: 500;
+}
+.heading p,
+.hint {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 8px;
+}
+.panel h4 {
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 12px;
+  margin: 24px 0 15px;
+}
+.panel h4 small {
+  font-weight: 400;
+  color: var(--muted);
+  margin-left: 8px;
+}
+.empty {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 10px 0;
+}
+.identifier {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 6px;
+  user-select: text;
+}
+.warning {
+  color: var(--warning);
+  line-height: 1.8;
+  font-size: 12px;
+  padding: 10px 0;
+}
+.details {
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+  font-size: 12px;
+}
+.details summary {
+  padding: 18px 0;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.events {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.events li {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 18px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  line-height: 1.8;
+}
+.events time,
+.events small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.events p {
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+.events .reason {
+  color: var(--muted);
+  margin-top: 6px;
+}
+@media (max-width: 850px) {
+  .events li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+  }
+}

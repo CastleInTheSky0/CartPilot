@@ -11,10 +11,27 @@ import type {
 import type { PurchaseTask, PurchaseTaskDefinition } from "../../shared/contracts/purchase-task.ts";
 import type { purchaseProgress } from "../domain/purchase-progress.ts";
 
+export interface PurchaseEventRecord {
+  sequence: number;
+  taskId: string;
+  intentId: string | null;
+  type: string;
+  detail: unknown;
+  at: string;
+}
+
 export interface PurchaseStore {
   createTask(input: PurchaseTaskDefinition): PurchaseTask;
   listTasks(): PurchaseTask[];
   getTask(taskId: string): PurchaseTask;
+  listRuns(taskId: string): PurchaseRun[];
+  listEvents(
+    taskId: string,
+    beforeSequence?: number,
+  ): {
+    items: PurchaseEventRecord[];
+    nextBeforeSequence: number | null;
+  };
   startRun(taskId: string): PurchaseRun;
   stopRun(runId: string): void;
   recoverInterruptedRuns(): void;

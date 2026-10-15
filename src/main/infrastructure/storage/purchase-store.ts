@@ -47,6 +47,11 @@ export function createPurchaseStore(
     createTask: (input) => records.atomic(() => records.createTask(input)),
     listTasks: () => records.listTasks(),
     getTask: (taskId) => records.getTask(taskId),
+    listRuns(taskId) {
+      records.getTask(taskId);
+      return records.runs(taskId);
+    },
+    listEvents: (taskId, beforeSequence) => records.listEvents(taskId, beforeSequence),
     startRun(taskId) {
       return records.atomic(() => {
         records.assertExecutionAllowed();

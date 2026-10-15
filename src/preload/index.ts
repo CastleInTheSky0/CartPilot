@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from "electron";
 import { z } from "zod";
 import { PurchaseTaskDefinitionSchema } from "../shared/contracts/purchase-task.ts";
 import { TaskOverviewSchema } from "../shared/contracts/task-workspace.ts";
+import { TaskHistoryQuerySchema, TaskHistorySchema } from "../shared/contracts/purchase-history.ts";
 import {
   BindBrowserTabSchema,
   BrowserStateSchema,
@@ -16,6 +17,11 @@ import {
 } from "../shared/contracts/desktop.ts";
 
 const api: DesktopApi = {
+  async getPurchaseTaskHistory(query) {
+    return TaskHistorySchema.parse(
+      await ipcRenderer.invoke(DESKTOP_CHANNELS.taskHistory, TaskHistoryQuerySchema.parse(query)),
+    );
+  },
   async listPurchaseTasks() {
     return z.array(TaskOverviewSchema).parse(await ipcRenderer.invoke(DESKTOP_CHANNELS.taskList));
   },

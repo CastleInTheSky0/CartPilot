@@ -1,9 +1,12 @@
+import { useState } from "react";
 import type { TaskOverview } from "../../../shared/contracts/task-workspace.ts";
+import { TaskHistoryPanel } from "./TaskHistoryPanel.tsx";
 import { PLATFORM_LABELS } from "../../shared/platform-labels.ts";
 import { formatMoney, formatTime, taskStatus } from "./task-presentation.ts";
 import styles from "./task-workspace.module.css";
 
 export function TaskDetail({ overview }: { overview: TaskOverview }) {
+  const [showHistory, setShowHistory] = useState(false);
   const { task, progress } = overview;
   const definition = task.definition;
   const status = taskStatus(overview);
@@ -21,6 +24,14 @@ export function TaskDetail({ overview }: { overview: TaskOverview }) {
       <p className={styles.notice}>
         任务已保存在本机。通用页面准备与执行功能正在接入，当前需要复核购买设置。
       </p>
+      <button
+        className="button subtle"
+        aria-expanded={showHistory}
+        onClick={() => setShowHistory((current) => !current)}
+      >
+        {showHistory ? "收起运行与订单记录" : "查看运行与订单记录"}
+      </button>
+      {showHistory && <TaskHistoryPanel taskId={task.id} />}
       <dl className={styles.facts}>
         <div>
           <dt>商品</dt>

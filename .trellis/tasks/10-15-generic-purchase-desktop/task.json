@@ -32,7 +32,7 @@
     "handoff_stage": "implementation",
     "implementation_gate": "authorized_by_user_2026_10_15",
     "current_milestone": "M3",
-    "implementation_checkpoint": "M3 已接入通用任务创建、列表、详情和真实进度，隔离桌面验证两种配额、显式提交方式、精确预算与重启持久化；下一步运行与订单历史。M1 IPv4 修复及隔离官方扩展接入通过，日常 Chrome 实机只读验收仍待重测",
+    "implementation_checkpoint": "M3 已接入通用任务创建、列表、详情、真实配额预算进度及运行订单历史，事件分页、未知占用和中断恢复可见；18 项桌面测试、30 项 SQLite 集成测试及新安装包实际隔离安装后的 6 项验收通过。下一步迁移核对界面、通知托盘与 M4 平台准备执行。M1 日常 Chrome 实机只读验收仍待重测",
     "open_questions": "",
     "resolved_questions": "Q01,Q02,Q03,Q04,Q05",
     "source": "grill-me",

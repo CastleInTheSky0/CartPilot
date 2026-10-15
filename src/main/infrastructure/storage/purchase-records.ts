@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type Database from "better-sqlite3";
-import { eq } from "drizzle-orm";
+import { and, desc, eq, lt } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { z } from "zod";
 import {
@@ -18,6 +18,7 @@ import {
 import {
   PurchaseTaskDefinitionSchema,
   PurchaseTaskSchema,
+  TimestampSchema,
   type PurchaseTaskDefinition,
 } from "../../../shared/contracts/purchase-task.ts";
 import { PurchaseError } from "../../domain/purchase-error.ts";
@@ -201,6 +202,40 @@ export class PurchaseRecords {
 
   releaseLocks(intentId: string): void {
     this.db.delete(checkoutLocks).where(eq(checkoutLocks.intentId, intentId)).run();
+  }
+
+  listEvents(taskId: string, beforeSequence?: number) {
+    this.getTask(taskId);
+    const before =
+      beforeSequence === undefined ? undefined : z.int().positive().parse(beforeSequence);
+    const rows = this.db
+      .select()
+      .from(purchaseEvents)
+      .where(
+        and(
+          eq(purchaseEvents.taskId, taskId),
+          before === undefined ? undefined : lt(purchaseEvents.sequence, before),
+        ),
+      )
+      .orderBy(desc(purchaseEvents.sequence))
+      .limit(51)
+      .all();
+    const items = rows.slice(0, 50).map((row) =>
+      z
+        .strictObject({
+          sequence: z.int().positive(),
+          taskId: z.uuid(),
+          intentId: z.uuid().nullable(),
+          type: z.string().min(1).max(200),
+          detail: z.record(z.string(), z.unknown()),
+          at: TimestampSchema,
+        })
+        .parse({ ...row, detail: JSON.parse(row.detail) }),
+    );
+    return {
+      items,
+      nextBeforeSequence: rows.length > 50 ? (items.at(-1)?.sequence ?? null) : null,
+    };
   }
 
   event(taskId: string, intentId: string | null, type: string, detail: unknown = {}): void {

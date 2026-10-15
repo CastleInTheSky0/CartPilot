@@ -2,6 +2,7 @@ import { z } from "zod";
 import { StorageStatusSchema } from "./storage.ts";
 import type { PurchaseTaskDefinition } from "./purchase-task.ts";
 import type { TaskOverview } from "./task-workspace.ts";
+import type { TaskHistory, TaskHistoryQuery } from "./purchase-history.ts";
 import type {
   BindBrowserTabInput,
   BrowserState,
@@ -25,6 +26,7 @@ export const DESKTOP_CHANNELS = {
   taskList: "tasks:list",
   taskGet: "tasks:get",
   taskCreate: "tasks:create",
+  taskHistory: "tasks:history",
 } as const;
 
 export const RuntimeInfoSchema = z.strictObject({
@@ -44,6 +46,7 @@ export interface DesktopApi {
   listPurchaseTasks(): Promise<TaskOverview[]>;
   getPurchaseTask(taskId: string): Promise<TaskOverview>;
   createPurchaseTask(definition: PurchaseTaskDefinition): Promise<TaskOverview>;
+  getPurchaseTaskHistory(query: TaskHistoryQuery): Promise<TaskHistory>;
   getBrowserState(): Promise<BrowserState>;
   getBrowserPreferences(): Promise<ConnectBrowserInput>;
   connectBrowser(input: ConnectBrowserInput): Promise<BrowserState>;
