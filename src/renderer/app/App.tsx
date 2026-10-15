@@ -17,13 +17,19 @@ import { ConnectionGuide } from "../features/connections/ConnectionGuide.tsx";
 import { CONNECTION_LABELS } from "../features/connections/browser-presentation.ts";
 import { useBrowserConnection } from "../features/connections/useBrowserConnection.ts";
 import { RuntimeSettings } from "../features/settings/RuntimeSettings.tsx";
+import { TaskWorkspace } from "../features/tasks/TaskWorkspace.tsx";
 import styles from "./app-shell.module.css";
 
-type View = "workspace" | "help" | "settings";
+type View = "workspace" | "connections" | "help" | "settings";
 const VIEW_COPY = {
   workspace: {
     label: "购买工作台",
     eyebrow: "PURCHASE WORKSPACE",
+    description: "管理通用商品任务，核对各平台数量与共享预算。",
+  },
+  connections: {
+    label: "浏览器连接",
+    eyebrow: "BROWSER CONNECTION",
     description: "接入日常浏览器，检查各平台的页面与登录状态。",
   },
   help: {
@@ -93,6 +99,14 @@ export function App() {
           >
             <LayoutDashboard size={17} />
             <span className={styles.navText}>购买工作台</span>
+          </button>
+          <button
+            aria-current={view === "connections" ? "page" : undefined}
+            onClick={() => navigate("connections")}
+            aria-label="浏览器连接"
+          >
+            <Monitor size={17} />
+            <span className={styles.navText}>浏览器连接</span>
             <span className={styles.navCount}>{count.toString().padStart(2, "0")}</span>
           </button>
           <button
@@ -109,16 +123,16 @@ export function App() {
           <p>当前工作区</p>
           <strong>
             <i />
-            浏览器准备
+            通用购买任务
           </strong>
           <small>
             {count ? `已接入 ${count} 个商城平台` : "等待接入第一个商城页面"}
             <br />
-            购买任务功能正在迁移
+            任务保存在本机
           </small>
         </div>
         <div className={styles.sidebarBottom}>
-          <button className={styles.browserStatus} onClick={() => navigate("workspace")}>
+          <button className={styles.browserStatus} onClick={() => navigate("connections")}>
             <Monitor size={20} />
             <span>
               <strong>
@@ -177,7 +191,7 @@ export function App() {
               <h1>{copy.label}</h1>
               <p>{copy.description}</p>
             </div>
-            {view === "workspace" && (
+            {view === "connections" && (
               <button className="button subtle" onClick={() => navigate("help")}>
                 <BookOpen size={14} />
                 接入指南
@@ -185,8 +199,11 @@ export function App() {
               </button>
             )}
           </div>
-          <div className={styles.page} key={view}>
-            {view === "workspace" && (
+          <div className={styles.page}>
+            <div hidden={view !== "workspace"}>
+              <TaskWorkspace />
+            </div>
+            {view === "connections" && (
               <>
                 <div className={styles.grid}>
                   <BrowserConnectionPanel connection={connection} />
@@ -195,12 +212,12 @@ export function App() {
                 <ChannelStatusTable connection={connection} />
               </>
             )}
-            {view === "help" && <ConnectionGuide onStart={() => navigate("workspace")} />}
+            {view === "help" && <ConnectionGuide onStart={() => navigate("connections")} />}
             {view === "settings" && <RuntimeSettings runtime={runtime} error={error} />}
           </div>
           <footer className={styles.footer}>
             <strong>CartPilot</strong>
-            <span>当前版本支持浏览器接入与状态检测，购买任务将在后续开放。</span>
+            <span>任务与浏览器状态保存在本机。页面准备与购买执行正在接入。</span>
           </footer>
         </main>
       </div>

@@ -1,5 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { z } from "zod";
+import { PurchaseTaskDefinitionSchema } from "../shared/contracts/purchase-task.ts";
+import { TaskOverviewSchema } from "../shared/contracts/task-workspace.ts";
 import {
   BindBrowserTabSchema,
   BrowserStateSchema,
@@ -14,6 +16,22 @@ import {
 } from "../shared/contracts/desktop.ts";
 
 const api: DesktopApi = {
+  async listPurchaseTasks() {
+    return z.array(TaskOverviewSchema).parse(await ipcRenderer.invoke(DESKTOP_CHANNELS.taskList));
+  },
+  async getPurchaseTask(taskId) {
+    return TaskOverviewSchema.parse(
+      await ipcRenderer.invoke(DESKTOP_CHANNELS.taskGet, z.uuid().parse(taskId)),
+    );
+  },
+  async createPurchaseTask(definition) {
+    return TaskOverviewSchema.parse(
+      await ipcRenderer.invoke(
+        DESKTOP_CHANNELS.taskCreate,
+        PurchaseTaskDefinitionSchema.parse(definition),
+      ),
+    );
+  },
   async getRuntimeInfo() {
     const result: unknown = await ipcRenderer.invoke(DESKTOP_CHANNELS.runtime);
     return RuntimeInfoSchema.parse(result);

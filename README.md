@@ -2,11 +2,11 @@
 
 AI 多平台抢购助手。
 
-正在按 [Trellis PRD](.trellis/tasks/10-15-generic-purchase-desktop/prd.md) 开发通用购买助手。已有 Electron 分层入口、普通 Chrome 扩展桥、只读标签接入、SQLite 与 Windows NSIS 验证包，M1 真实 Chrome 授权接入仍待验收。M2 已实现通用任务、配额预算事务、多笔订单、取消恢复和旧数据迁移的离线内核；工作台与通用平台执行接口将在后续阶段接入。完整进展见 [开发进展](docs/development-progress.md)。
+正在按 [Trellis PRD](.trellis/tasks/10-15-generic-purchase-desktop/prd.md) 开发通用购买助手。已有 Electron 分层入口、普通 Chrome 扩展桥、只读标签接入、SQLite 与 Windows NSIS 验证包，M1 日常 Chrome 授权接入仍待实机验收。M2 离线内核已实现；M3 源码开发版已支持通用任务创建、列表、详情和持久化进度。通用平台准备与执行将在 M4 接入。完整进展见 [开发进展](docs/development-progress.md)。
 
 ## Electron 桌面验证版
 
-Windows x64 安装包：`release/CartPilot-2.1.0-x64-Setup.exe`。安装后可独立启动，无需安装 Node 或启动 HTTP 服务。当前用于连接与存储验证，尚不提供通用购买任务。
+Windows x64 安装包：`release/CartPilot-2.1.0-x64-Setup.exe`。安装后可独立启动，无需安装 Node 或启动 HTTP 服务。已验证的包用于连接与存储验证；更新源码后需重新打包，才能包含最新工作台。
 
 ```powershell
 npm ci
@@ -22,6 +22,8 @@ npm run desktop:verify-package  # PowerShell 7，隔离安装、测试并卸载
 桌面通过官方扩展连接普通 Chrome，按平台选择标签页。连接、接入与登录分别显示，导航或关闭后需要重新接入；断开保留 Chrome 页面。已修复本机 IPv6 回环受限导致的 `Failed to connect to MCP relay: WebSocket error`，中继改为优先 IPv4；隔离官方扩展的授权、接入和重连已验证，日常 Chrome 的实机只读验收仍待补充。更新后关闭旧授权页，重新连接并在新弹出的扩展页面授权。
 
 数据保存在 Electron userData 的 `cartpilot.sqlite`，可用绝对路径环境变量 `CARTPILOT_DATA_DIR` 指定隔离目录。除资料目录偏好与安装标识，存储层已支持通用任务与多笔订单。旧数据迁移具备原始文件及数据库备份、重复检测、冲突阻塞和冷却保留；目前尚未开放界面入口，也未迁移用户当前 `.data`。原服务继续使用原数据，浏览器资料与登录会话保留。
+
+源码开发版在“购买工作台”新建任务，可填写任意商品、规格键值、多平台主备候选、合计或分平台目标、单笔数量、预算和开售时间；同平台多个候选共享目标。减量拆单默认关闭，提交方式必须明确选择。金额精确保存为整数分，重启保留任务与已下单、未决、预留的进度。任务保存后待复核，当前尚未开放通用页面准备与购买执行；浏览器接入位于“浏览器连接”。
 
 ## 保留的旧版：Duo 首发助手
 

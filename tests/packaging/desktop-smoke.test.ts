@@ -14,7 +14,7 @@ test("构建后的桌面可独立启动，renderer 只有受限 preload 能力",
     await page.getByRole("heading", { name: "购买工作台", exact: true }).waitFor();
     await page.getByRole("button", { name: "应用设置", exact: true }).click();
     await page.getByText(dataDirectory, { exact: true }).waitFor();
-    await page.getByRole("button", { name: "购买工作台", exact: true }).click();
+    await page.getByRole("button", { name: "浏览器连接", exact: true }).click();
     const runtime = await page.evaluate(() => window.cartPilot.getRuntimeInfo());
     assert.equal(runtime.isPackaged, Boolean(process.env.CARTPILOT_EXECUTABLE));
     assert.equal(await page.evaluate(() => "require" in window), false);
@@ -37,7 +37,7 @@ test("构建后的桌面可独立启动，renderer 只有受限 preload 能力",
     assert.equal(failed.connection.phase, "error");
     await page.getByRole("button", { name: "使用说明", exact: true }).click();
     await page.getByRole("heading", { name: "三步完成浏览器接入" }).waitFor();
-    await page.getByRole("button", { name: "返回工作台", exact: true }).click();
+    await page.getByRole("button", { name: "前往浏览器连接", exact: true }).click();
     await page.getByRole("status").filter({ hasText: "扩展连接异常" }).waitFor();
     await page.getByText("Chrome 资料目录（可选）", { exact: true }).click();
     assert.equal(

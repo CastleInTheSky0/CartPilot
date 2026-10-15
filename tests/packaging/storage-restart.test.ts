@@ -13,6 +13,7 @@ test("Electron 原生 SQLite 完成迁移，重启保留设置且不重复迁移
   let schemaVersion: number;
   try {
     const page = await first.firstWindow();
+    await page.getByRole("button", { name: "浏览器连接", exact: true }).click();
     const runtime = await page.evaluate(() => window.cartPilot.getRuntimeInfo());
     installationId = runtime.storage.installationId;
     schemaVersion = runtime.storage.schemaVersion;

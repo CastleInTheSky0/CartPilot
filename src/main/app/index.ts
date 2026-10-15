@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import { app, BrowserWindow, dialog } from "electron";
 import { registerDesktopIpc } from "../ipc/register-desktop-ipc.ts";
 import { registerBrowserIpc } from "../ipc/register-browser-ipc.ts";
+import { registerTaskIpc } from "../ipc/register-task-ipc.ts";
 import { BrowserWorkerClient } from "../infrastructure/browser/browser-worker-client.ts";
 import { openDesktopStore, type DesktopStore } from "../infrastructure/storage/desktop-store.ts";
 import { isTrustedRendererUrl, rendererContentSecurityPolicy } from "../ipc/renderer-access.ts";
@@ -67,6 +68,7 @@ async function createWindow(): Promise<void> {
   });
   registerDesktopIpc(window, rendererUrl, store);
   registerBrowserIpc(window, rendererUrl, browser, store);
+  registerTaskIpc(window, rendererUrl, store.purchases);
   window.once("ready-to-show", () => window?.show());
   window.once("closed", () => {
     window = null;

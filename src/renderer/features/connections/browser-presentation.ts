@@ -1,14 +1,6 @@
 import type { BrowserState } from "../../../shared/contracts/browser.ts";
 
-export const PLATFORM_LABELS = {
-  apple: "Apple 中国官网",
-  taobao: "淘宝",
-  tmall: "天猫",
-  jd: "京东",
-  douyin: "抖音商城",
-};
-
-export const PLATFORM_MARKS = { apple: "A", taobao: "淘", tmall: "猫", jd: "京", douyin: "抖" };
+export { PLATFORM_LABELS, PLATFORM_MARKS } from "../../shared/platform-labels.ts";
 
 export const CONNECTION_LABELS = {
   disconnected: "扩展未连接",

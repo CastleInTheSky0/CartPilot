@@ -32,7 +32,7 @@
     "handoff_stage": "implementation",
     "implementation_gate": "authorized_by_user_2026_10_15",
     "current_milestone": "M3",
-    "implementation_checkpoint": "M2 离线内核已落地。优先修复用户实测的 M1 中继 WebSocket 错误：独立中继优先 IPv4，隔离官方扩展完整接入与重连两轮通过；日常 Chrome 实机只读验收仍待重测，后续继续 M3 工作台",
+    "implementation_checkpoint": "M3 已接入通用任务创建、列表、详情和真实进度，隔离桌面验证两种配额、显式提交方式、精确预算与重启持久化；下一步运行与订单历史。M1 IPv4 修复及隔离官方扩展接入通过，日常 Chrome 实机只读验收仍待重测",
     "open_questions": "",
     "resolved_questions": "Q01,Q02,Q03,Q04,Q05",
     "source": "grill-me",

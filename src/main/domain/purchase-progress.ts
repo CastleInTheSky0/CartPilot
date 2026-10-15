@@ -1,5 +1,6 @@
 import type { Platform } from "../../shared/contracts/browser.ts";
 import type { PurchaseTaskDefinition } from "../../shared/contracts/purchase-task.ts";
+import type { PurchaseProgress } from "../../shared/contracts/task-workspace.ts";
 import { PurchaseError } from "./purchase-error.ts";
 
 export interface PurchaseUsage {
@@ -16,7 +17,10 @@ function sum(values: number[]): number {
   return total;
 }
 
-export function purchaseProgress(task: PurchaseTaskDefinition, usage: PurchaseUsage[]) {
+export function purchaseProgress(
+  task: PurchaseTaskDefinition,
+  usage: PurchaseUsage[],
+): PurchaseProgress {
   const platforms = [...new Set(task.candidates.map((candidate) => candidate.platform))];
   const held = usage.filter((item) => item.status !== "released");
   const confirmed = held.filter((item) => item.status === "confirmed");
