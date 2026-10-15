@@ -2,9 +2,27 @@
 
 AI 多平台抢购助手。
 
-当前代码为既有的 Duo 网页助手版本；通用商品、多任务、Electron 和模型接入改造仍处于需求阶段。已确认的改造范围见 [Trellis PRD](.trellis/tasks/10-15-generic-purchase-desktop/prd.md)、[需求文档](docs/requirements.md)和[技术方案](docs/architecture.md)。以下使用说明对应当前代码。
+正在按 [Trellis PRD](.trellis/tasks/10-15-generic-purchase-desktop/prd.md) 开发通用购买助手。当前已交付 M1 桌面技术验证：Electron 分层入口、普通 Chrome 扩展桥、只读标签接入、SQLite 设置持久化与 Windows NSIS 验证包。通用商品、多任务、订单内核和模型接入将在后续阶段迁移；完整进展见 [开发进展](docs/development-progress.md)。
 
-## 当前版本：Duo 首发助手
+## Electron 桌面验证版
+
+Windows x64 安装包：`release/CartPilot-2.1.0-x64-Setup.exe`。安装后可独立启动，无需安装 Node 或启动 HTTP 服务。当前用于连接与存储验证，尚不提供通用购买任务。
+
+```powershell
+npm ci
+npm run desktop:dev       # 开发窗口，独立使用 5174 端口
+npm run desktop:build
+npm run desktop:start     # 启动构建后的桌面
+npm run desktop:test      # 隔离测试，需要已安装测试用 Chromium
+npm run desktop:package   # 生成 Windows NSIS 安装包
+npm run desktop:verify-package  # PowerShell 7，隔离安装、测试并卸载
+```
+
+桌面通过官方扩展连接普通 Chrome，按平台选择标签页。连接、接入与登录分别显示，导航或关闭后需要重新接入；断开保留 Chrome 页面。真实 Chrome 扩展授权仍待补充实机验证记录。
+
+数据保存在 Electron userData 的 `cartpilot.sqlite`，可用绝对路径环境变量 `CARTPILOT_DATA_DIR` 指定隔离目录。当前仅保存资料目录偏好与安装标识，旧 `.data` 的配置、订单和冷却记录尚未迁移，仍由原服务使用。
+
+## 保留的旧版：Duo 首发助手
 
 Windows 本地购买助手，支持 Apple 中国官网、淘宝、天猫、京东和抖音商城的独立配置。React + TypeScript + Vite 界面，Node.js + Express 服务，默认通过官方 Playwright Extension 接入日常使用的 Google Chrome，沿用该 Chrome 资料的登录会话。也可切换到各平台独立资料的助手窗口。
 

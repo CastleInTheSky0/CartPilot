@@ -1,3 +1,4 @@
+import { mkdirSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { app, BrowserWindow, dialog } from "electron";
@@ -11,6 +12,7 @@ app.setName("CartPilot");
 const dataDirectory = process.env.CARTPILOT_DATA_DIR;
 if (dataDirectory) {
   if (!isAbsolute(dataDirectory)) throw new Error("CARTPILOT_DATA_DIR 必须是绝对路径。");
+  mkdirSync(dataDirectory, { recursive: true });
   app.setPath("userData", dataDirectory);
 }
 

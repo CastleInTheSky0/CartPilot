@@ -1,19 +1,14 @@
 import assert from "node:assert/strict";
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { join } from "node:path";
 import test from "node:test";
-import { _electron } from "playwright";
+import { launchDesktop } from "./desktop-fixture.ts";
 import type {} from "../../src/renderer/env.d.ts";
 
 test("Electron 原生 SQLite 完成迁移，重启保留设置且不重复迁移", { timeout: 45_000 }, async () => {
   const dataDirectory = await mkdtemp(join(tmpdir(), "cartpilot-storage-"));
-  const env: Record<string, string> = {};
-  for (const [key, value] of Object.entries(process.env)) {
-    if (value !== undefined && key !== "ELECTRON_RUN_AS_NODE") env[key] = value;
-  }
-  env.CARTPILOT_DATA_DIR = dataDirectory;
-  const first = await _electron.launch({ args: [resolve(".")], env });
+  const first = await launchDesktop(dataDirectory);
   let installationId: string;
   try {
     const page = await first.firstWindow();
@@ -32,7 +27,7 @@ test("Electron 原生 SQLite 完成迁移，重启保留设置且不重复迁移
     await first.close();
   }
 
-  const second = await _electron.launch({ args: [resolve(".")], env });
+  const second = await launchDesktop(dataDirectory);
   try {
     const page = await second.firstWindow();
     const runtime = await page.evaluate(() => window.cartPilot.getRuntimeInfo());

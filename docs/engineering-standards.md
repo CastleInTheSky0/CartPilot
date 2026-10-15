@@ -122,7 +122,7 @@ docs/
 | 工具 | 职责 | 当前状态 |
 | --- | --- | --- |
 | EditorConfig | UTF-8、缩进、换行与文件结尾 | 已新增 `.editorconfig` |
-| Prettier | 统一格式，不负责业务正确性 | 已新增配置，CLI 依赖在迁移工具链阶段接入 |
+| Prettier | 统一格式，不负责业务正确性 | M1 已安装 CLI，用于新增与迁移模块；不做无关的全仓格式化 |
 | TypeScript | 严格类型检查 | 现有项目已启用 |
 | ESLint + typescript-eslint | 常见错误、React hooks、异步与导入约束 | 在迁移工具链阶段接入，采用官方推荐规则 |
 | 行数检查 | 全部受支持代码文件的统一计数、旧文件增长限制 | 已新增 `npm run check:lines` |

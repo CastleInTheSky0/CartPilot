@@ -30,7 +30,16 @@
 - `postinstall` 使用 electron-builder 为 Electron ABI 重建原生依赖，已在 Windows x64 成功装载。
 - `npm run desktop:build` 和 `npm run desktop:test` 6 项通过，新增真实 Electron 原生模块迁移、关闭、重启、设置持久化及不重复迁移测试；重启保持未连接，不自动授权浏览器。
 
-实际安装包尚待验证，M1 及 PRD 验收项均未标为完成。
+### Windows 安装包验证
+
+- 已生成 `release/CartPilot-2.1.0-x64-Setup.exe`，Windows x64 NSIS 安装包，约 122 MiB；随包包含 Electron，不依赖用户另外安装 Node 或 tsx。
+- 使用 ASAR 打包；执行工作进程、Playwright、Zod 和 SQLite 原生文件按需要解包，Drizzle 迁移作为资源分发。
+- 首次实际安装发现 worker 无法加载 ASAR 内的 Zod，补充解包配置后通过。验证安装在仓库外的独立临时目录，避免源仓库依赖掩盖漏包。
+- `npm run desktop:verify-package` 使用 PowerShell 7 检查已有安装，隔离安装、运行 3 项真实安装后测试并卸载。覆盖 renderer 隔离、utilityProcess 与官方中继缺失扩展回报、SQLite 迁移与重启持久化、单实例拒绝重复启动；卸载保留用户数据。
+- 实际安装包验证通过，测试副本已卸载。记录保存在 `output/packaging/*/verification.json`，截图保存在 `output/playwright/installed-desktop.png`。
+- 开发构建的桌面测试共 7 项通过；旧版 72 项回归通过；新代码满足 400 行，4 个历史文件仍按原基线待后续拆分。
+
+M1 尚缺用户日常 Chrome 中的官方扩展授权、接入与断开实机记录；为保留现有运行连接未发起该操作。M1 与 PRD 整体验收仍未勾选，M2–M6 尚未实施。当前安装包是连接与存储验证版，未启用购买任务。
 
 ## 后续阶段
 

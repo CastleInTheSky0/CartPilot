@@ -3,21 +3,18 @@ import { mkdir, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { resolve, join } from "node:path";
 import test from "node:test";
-import { _electron } from "playwright";
+import { launchDesktop } from "./desktop-fixture.ts";
 import type {} from "../../src/renderer/env.d.ts";
 
 test("构建后的桌面可独立启动，renderer 只有受限 preload 能力", { timeout: 45_000 }, async () => {
   const dataDirectory = await mkdtemp(join(tmpdir(), "cartpilot-desktop-"));
-  const env: Record<string, string> = {};
-  for (const [key, value] of Object.entries(process.env)) {
-    if (value !== undefined && key !== "ELECTRON_RUN_AS_NODE") env[key] = value;
-  }
-  env.CARTPILOT_DATA_DIR = dataDirectory;
-  const application = await _electron.launch({ args: [resolve(".")], env });
+  const application = await launchDesktop(dataDirectory);
   try {
     const page = await application.firstWindow();
     await page.getByRole("heading", { name: "先连接你的日常浏览器" }).waitFor();
     await page.getByText(dataDirectory, { exact: true }).waitFor();
+    const runtime = await page.evaluate(() => window.cartPilot.getRuntimeInfo());
+    assert.equal(runtime.isPackaged, Boolean(process.env.CARTPILOT_EXECUTABLE));
     assert.equal(await page.evaluate(() => "require" in window), false);
     assert.equal(await page.evaluate(() => "process" in window), false);
     const methods = await page.evaluate(() => Object.keys(window.cartPilot));
@@ -49,7 +46,8 @@ test("构建后的桌面可独立启动，renderer 只有受限 preload 能力",
     });
     assert.equal(application.windows().length, 1);
     await mkdir(resolve("output/playwright"), { recursive: true });
-    await page.screenshot({ path: resolve("output/playwright/desktop.png"), fullPage: true });
+    const name = process.env.CARTPILOT_EXECUTABLE ? "installed-desktop.png" : "desktop.png";
+    await page.screenshot({ path: resolve("output/playwright", name), fullPage: true });
   } finally {
     await application.close();
   }

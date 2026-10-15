@@ -32,6 +32,7 @@
     "handoff_stage": "implementation",
     "implementation_gate": "authorized_by_user_2026_10_15",
     "current_milestone": "M1",
+    "implementation_checkpoint": "桌面、扩展工作进程、SQLite 与实际安装包验证已落地；真实 Chrome 授权接入待记录",
     "open_questions": "",
     "resolved_questions": "Q01,Q02,Q03,Q04,Q05",
     "source": "grill-me",

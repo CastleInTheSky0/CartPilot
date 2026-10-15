@@ -20,6 +20,8 @@
     "desktop:check": "tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.web.json --noEmit",
     "desktop:build": "npm run check:lines && npm run desktop:check && electron-vite build",
     "desktop:start": "electron .",
+    "desktop:package": "npm run desktop:build && electron-builder --win nsis --x64 --publish never",
+    "desktop:verify-package": "pwsh -NoProfile -File scripts/verify-windows-package.ps1",
     "desktop:test": "tsx --test --test-concurrency=1 tests/unit/*.test.ts tests/packaging/*.test.ts",
     "db:generate": "drizzle-kit generate",
     "check:lines": "node scripts/check-file-lines.mjs",

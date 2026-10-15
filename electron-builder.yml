@@ -10,6 +10,7 @@ asarUnpack:
   - out/main/**/*
   - node_modules/playwright/**/*
   - node_modules/playwright-core/**/*
+  - node_modules/zod/**/*
   - node_modules/better-sqlite3/**/*
 extraResources:
   - from: migrations
