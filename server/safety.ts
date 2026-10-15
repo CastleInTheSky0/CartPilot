@@ -17,7 +17,7 @@ const DOMAINS: Record<Platform, string[]> = {
   apple: ["apple.com.cn", "apple.com"],
   taobao: ["taobao.com", "tmall.com"],
   tmall: ["tmall.com", "taobao.com"],
-  jd: ["jd.com"],
+  jd: ["jd.com", "jd.hk"],
   douyin: ["douyin.com", "jinritemai.com"],
 };
 
@@ -35,7 +35,8 @@ export function productId(value: string, platform: Platform): string | null {
   const url = new URL(value);
   if (platform === "apple") return url.hostname === "www.apple.com.cn" && /^\/shop\/buy-iphone\/iphone-duo(?:\/|$)/.test(url.pathname) ? "iphone-duo" : null;
   if (platform === "jd") {
-    if (url.hostname === "item.jd.com") return url.pathname.match(/^\/(\d+)\.html$/)?.[1] ?? null;
+    if (["item.jd.com", "npcitem.jd.hk"].includes(url.hostname))
+      return url.pathname.match(/^\/(\d+)\.html$/)?.[1] ?? null;
     if (url.hostname === "item.m.jd.com") return url.pathname.match(/^\/product\/(\d+)\.html$/)?.[1] ?? null;
     return null;
   }

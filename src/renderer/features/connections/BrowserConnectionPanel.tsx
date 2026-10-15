@@ -9,6 +9,8 @@ export function BrowserConnectionPanel({ connection }: { connection: BrowserConn
   const phase = connection.state?.connection.phase ?? "disconnected";
   const isConnected = phase === "connected";
   const isConnecting = phase === "connecting";
+  const tabsLoading = connection.tabsStatus === "loading";
+  const platformName = PLATFORM_LABELS[connection.platform];
 
   return (
     <section className={styles.panel} aria-labelledby="connection-heading">
@@ -71,16 +73,17 @@ export function BrowserConnectionPanel({ connection }: { connection: BrowserConn
           <button
             className="button subtle"
             onClick={() => void connection.list()}
-            disabled={!isConnected || connection.busy}
+            disabled={!isConnected || connection.busy || tabsLoading}
           >
-            <RefreshCw size={13} />
-            刷新列表
+            <RefreshCw size={13} className={tabsLoading ? "spin" : undefined} />
+            {tabsLoading ? "正在读取…" : "刷新列表"}
           </button>
         </div>
         <div className={styles.picker}>
           <label className={styles.platformSelect}>
             选择平台
             <select
+              aria-label="选择平台"
               value={connection.platform}
               onChange={(event) => connection.setPlatform(PlatformSchema.parse(event.target.value))}
               disabled={connection.busy}
@@ -95,13 +98,22 @@ export function BrowserConnectionPanel({ connection }: { connection: BrowserConn
           <label className={styles.tabSelect}>
             选择已打开的页面
             <select
+              aria-label="选择已打开的页面"
+              aria-describedby="browser-tabs-status browser-tabs-help"
+              aria-busy={tabsLoading}
               value={connection.tabId}
               onChange={(event) => connection.setTabId(event.target.value)}
-              disabled={!isConnected || connection.busy || !connection.tabs.length}
+              disabled={!isConnected || connection.busy || tabsLoading || !connection.tabs.length}
             >
               {!connection.tabs.length && (
                 <option value="">
-                  {isConnected ? "请打开商城页面，再刷新列表" : "连接 Chrome 后选择标签页"}
+                  {!isConnected
+                    ? "连接 Chrome 后选择标签页"
+                    : tabsLoading
+                      ? "正在读取已授权页面…"
+                      : connection.tabsError
+                        ? "读取失败，请刷新重试"
+                        : `暂无已授权的${platformName}页面`}
                 </option>
               )}
               {connection.tabs.map((tab) => (
@@ -112,12 +124,32 @@ export function BrowserConnectionPanel({ connection }: { connection: BrowserConn
             </select>
           </label>
         </div>
+        <p
+          id="browser-tabs-status"
+          className={connection.tabsError ? styles.error : styles.message}
+          role={connection.tabsError ? "alert" : "status"}
+          aria-label="标签页列表状态"
+        >
+          {!isConnected
+            ? "连接后会自动读取已授权的商城页面。"
+            : tabsLoading
+              ? `正在读取已授权的${platformName}页面…`
+              : connection.tabsError
+                ? connection.tabsError
+                : connection.tabs.length
+                  ? `找到 ${connection.tabs.length} 个已授权的${platformName}页面，请选择后接入。`
+                  : `未找到已授权的${platformName}页面。请确认平台选择正确，页面使用 HTTPS，并已加入本次连接的标签组。`}
+        </p>
+        <p id="browser-tabs-help" className={styles.message}>
+          在扩展授权页点击商城页面旁的“Allow &amp; select”。已连接时，可将商城标签页拖入 Chrome
+          的“CartPilot 购买助手”标签组，再刷新列表。页面须位于本次连接的 Chrome 资料中。
+        </p>
         <div className={styles.bindAction}>
           <span>每个平台分别接入，登录状态自动检测。</span>
           <button
             className="button"
             onClick={() => void connection.bind()}
-            disabled={!isConnected || !connection.tabId || connection.busy}
+            disabled={!isConnected || !connection.tabId || connection.busy || tabsLoading}
           >
             接入所选标签页
             <ArrowRight size={13} />

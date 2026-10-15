@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import type { BrowserState, BrowserTab, Platform } from "../../../shared/contracts/browser.ts";
+import type { BrowserState, Platform } from "../../../shared/contracts/browser.ts";
+import { useBrowserTabs } from "./useBrowserTabs.ts";
 
 export function useBrowserConnection() {
   const [state, setState] = useState<BrowserState | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [platform, setPlatform] = useState<Platform>("jd");
-  const [tabs, setTabs] = useState<BrowserTab[]>([]);
-  const [tabId, setTabId] = useState("");
   const [profile, setProfile] = useState("");
+  const browserTabs = useBrowserTabs(platform, state?.connection);
 
   useEffect(() => {
     let active = true;
@@ -37,11 +37,6 @@ export function useBrowserConnection() {
     };
   }, []);
 
-  useEffect(() => {
-    setTabs([]);
-    setTabId("");
-  }, [platform, state?.connection.phase]);
-
   const run = useCallback(async (operation: () => Promise<void>) => {
     setBusy(true);
     setError("");
@@ -61,10 +56,8 @@ export function useBrowserConnection() {
     error,
     busy,
     platform,
-    tabs,
-    tabId,
+    ...browserTabs,
     setPlatform,
-    setTabId,
     connect: (profile: string) =>
       run(async () => {
         setState(
@@ -76,15 +69,9 @@ export function useBrowserConnection() {
         setState(await window.cartPilot.disconnectBrowser());
       }),
     install: () => run(() => window.cartPilot.openExtensionInstall()),
-    list: () =>
-      run(async () => {
-        const result = await window.cartPilot.listBrowserTabs(platform);
-        setTabs(result);
-        setTabId(result[0]?.id ?? "");
-      }),
     bind: () =>
       run(async () => {
-        setState(await window.cartPilot.bindBrowserTab({ platform, tabId }));
+        setState(await window.cartPilot.bindBrowserTab({ platform, tabId: browserTabs.tabId }));
       }),
     refresh: (target: Platform) =>
       run(async () => {

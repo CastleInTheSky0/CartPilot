@@ -6,15 +6,15 @@ const STEPS = [
     icon: Globe2,
     title: "安装扩展，连接 Chrome",
     description:
-      "打开“浏览器连接”中的官方扩展安装页，安装后点击“连接普通 Chrome”，在浏览器里允许本次连接。",
+      "先在日常 Chrome 打开商城页面，安装官方扩展后点击“连接普通 Chrome”。在授权页找到商城页面，点击它旁边的“Allow & select”。",
     note: "复用日常浏览器，无需重新迁移登录信息。",
   },
   {
     icon: MousePointer2,
     title: "选择你要接入的商城页面",
     description:
-      "在 Chrome 打开商城页面，回到“浏览器连接”选择平台、刷新标签列表，再接入对应标签页。每个平台分别选择。",
-    note: "助手只读取你明确接入的页面及其打开的弹窗。",
+      "回到“浏览器连接”选择平台，列表自动读取已授权页面。新增页面时，将标签页拖入 Chrome 的“CartPilot 购买助手”标签组，再刷新列表并接入。每个平台分别选择。",
+    note: "仅打开网页还不够；页面须在本次连接的 Chrome 资料与授权标签组中。",
   },
   {
     icon: ShieldCheck,

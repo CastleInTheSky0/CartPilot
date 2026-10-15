@@ -99,3 +99,37 @@ test("同一标签页不跨渠道争用，导航或关闭立即使接入失效",
     await context.close();
   }
 });
+
+test("京东国际标签可按京东列出并显式接入，不改写地址或推定登录", async () => {
+  const context = await native.newContext();
+  let requests = 0;
+  await context.route("**/*", async (route) => {
+    requests++;
+    await route.fulfill({ body: "<main>Offline international product</main>" });
+  });
+  const page = await context.newPage();
+  const url = "https://npcitem.jd.hk/100020569664.html?tracking=PRIVATE#details";
+  await page.goto(url);
+  const service = new ExtensionService(connector, () => {});
+  try {
+    await service.execute({ type: "connect", input: { profileDirectory: null } });
+    await service.connection.settled();
+    const tabs = await service.execute({ type: "list", platform: "jd" });
+    if (tabs.kind !== "tabs") throw new Error("expected tabs");
+    assert.equal(tabs.value.length, 1);
+    const tab = tabs.value[0];
+    assert.equal(tab.url, "https://npcitem.jd.hk/100020569664.html");
+    assert.equal(tab.title, "npcitem.jd.hk · 商品 100020569664");
+    await service.execute({ type: "bind", input: { platform: "jd", tabId: tab.id } });
+    const channel = service.snapshot().channels.find((item) => item.platform === "jd");
+    assert.equal(channel?.tab?.id, tab.id);
+    assert.equal(channel?.login.state, "unknown");
+    assert.equal(page.url(), url);
+    assert.equal(requests, 1);
+    await service.execute({ type: "disconnect" });
+    assert.equal(page.isClosed(), false);
+  } finally {
+    await service.dispose();
+    await context.close();
+  }
+});

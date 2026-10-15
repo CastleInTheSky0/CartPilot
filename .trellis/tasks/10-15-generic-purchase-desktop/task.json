@@ -32,7 +32,7 @@
     "handoff_stage": "implementation",
     "implementation_gate": "authorized_by_user_2026_10_15",
     "current_milestone": "M3",
-    "implementation_checkpoint": "M3 已接入通用任务创建、列表、详情、真实配额预算进度及运行订单历史，事件分页、未知占用和中断恢复可见；18 项桌面测试、30 项 SQLite 集成测试及新安装包实际隔离安装后的 6 项验收通过。下一步迁移核对界面、通知托盘与 M4 平台准备执行。M1 日常 Chrome 实机只读验收仍待重测",
+    "implementation_checkpoint": "M3 已接入通用任务工作台与运行订单历史；修复京东国际 jd.hk 标签被过滤，补充自动读取、空列表提示和过期请求保护。24 项桌面测试、18 项相关旧版回归及官方扩展隔离环境两轮界面接入通过，本次仅更新开发构建；此前 SQLite 30 项与安装包实际隔离安装 6 项验收通过。下一步迁移核对界面、通知托盘与 M4 平台准备执行。M1 日常 Chrome 实机只读验收仍待重测",
     "open_questions": "",
     "resolved_questions": "Q01,Q02,Q03,Q04,Q05",
     "source": "grill-me",

@@ -32,13 +32,14 @@ export function canonicalCandidateUrl(value: string, platform: Platform): string
     return `${url.origin}${url.pathname}`;
   }
   if (platform === "jd") {
+    const international = url.hostname === "npcitem.jd.hk";
     const id =
-      url.hostname === "item.jd.com"
+      url.hostname === "item.jd.com" || international
         ? url.pathname.match(/^\/(\d+)\.html$/)?.[1]
         : url.hostname === "item.m.jd.com"
           ? url.pathname.match(/^\/product\/(\d+)\.html$/)?.[1]
           : null;
-    return id ? `https://item.jd.com/${id}.html` : null;
+    return id ? `https://${international ? "npcitem.jd.hk" : "item.jd.com"}/${id}.html` : null;
   }
   if (platform === "douyin" && url.hostname === "www.douyin.com") {
     const id = url.pathname.match(/^\/shopping\/product\/(\d+)\/?$/)?.[1];
