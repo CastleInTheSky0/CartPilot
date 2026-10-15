@@ -135,3 +135,45 @@ test("候选只接受对应平台商品页并去除跟踪参数，Apple 不再�
   });
   assert.equal(apple.candidates[0].platform, "apple");
 });
+
+test("规格键在标准化前拒绝覆盖和歧义，不能通过首尾空白静默改写目标", () => {
+  const task = purchaseDefinition();
+  for (const specifications of [
+    { 颜色: "黑色", " 颜色 ": "白色" },
+    { Size: "42", Ｓize: "43" },
+    { "尺 码": "42", 尺码: "43" },
+    { "\u200b": "无名称" },
+  ]) {
+    assert.equal(
+      PurchaseTaskDefinitionSchema.safeParse({
+        ...task,
+        product: { ...task.product, specifications },
+      }).success,
+      false,
+    );
+  }
+});
+
+test("候选商品和 SKU 编号必须与详情链接中明确的身份一致", () => {
+  const task = purchaseDefinition();
+  assert.equal(
+    PurchaseTaskDefinitionSchema.safeParse({
+      ...task,
+      candidates: [{ ...task.candidates[0], productId: "999" }],
+    }).success,
+    false,
+  );
+  assert.equal(
+    PurchaseTaskDefinitionSchema.safeParse({
+      ...task,
+      candidates: [
+        {
+          ...task.candidates[1],
+          productUrl: "https://detail.tmall.com/item.htm?id=456&skuId=100",
+          skuId: "200",
+        },
+      ],
+    }).success,
+    false,
+  );
+});

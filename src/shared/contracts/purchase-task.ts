@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { PlatformSchema } from "./browser.ts";
-import { canonicalCandidateUrl } from "./product-url.ts";
+import { candidateUrlIdentity, canonicalCandidateUrl } from "./product-url.ts";
 
 export const QuantitySchema = z.int().positive().max(1_000_000);
 export const MoneySchema = z.int().nonnegative();
@@ -8,7 +8,17 @@ export const TimestampSchema = z.iso.datetime({ offset: true });
 const LabelSchema = z.string().trim().min(1).max(200);
 
 export const SpecificationsSchema = z
-  .record(z.string().trim().min(1).max(60), LabelSchema)
+  .record(
+    z
+      .string()
+      .min(1)
+      .max(60)
+      .refine(
+        (key) => key === key.trim() && key.replace(/[\s\u200b]/g, "").length > 0,
+        "规格名称不能为空或含首尾空白",
+      ),
+    LabelSchema,
+  )
   .refine((value) => Object.keys(value).length <= 30, "规格不能超过 30 项")
   .refine((value) => {
     const keys = Object.keys(value).map((key) =>
@@ -37,12 +47,27 @@ export const CandidateSchema = z
     launchAt: TimestampSchema.optional(),
   })
   .superRefine((candidate, context) => {
-    if (!canonicalCandidateUrl(candidate.productUrl, candidate.platform))
+    const identity = candidateUrlIdentity(candidate.productUrl, candidate.platform);
+    if (!identity) {
       context.addIssue({
         code: "custom",
         path: ["productUrl"],
         message: "请使用当前平台的完整商品详情链接",
       });
+      return;
+    }
+    if (
+      identity.productId &&
+      candidate.productId !== null &&
+      identity.productId !== candidate.productId
+    )
+      context.addIssue({
+        code: "custom",
+        path: ["productId"],
+        message: "商品编号与详情链接不一致",
+      });
+    if (identity.skuId && candidate.skuId !== null && identity.skuId !== candidate.skuId)
+      context.addIssue({ code: "custom", path: ["skuId"], message: "SKU 与详情链接不一致" });
   })
   .transform((candidate) => ({
     ...candidate,

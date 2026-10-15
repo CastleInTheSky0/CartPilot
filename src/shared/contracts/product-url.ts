@@ -1,5 +1,20 @@
 import type { Platform } from "./browser.ts";
 
+export function candidateUrlIdentity(value: string, platform: Platform) {
+  const canonical = canonicalCandidateUrl(value, platform);
+  if (!canonical) return null;
+  const url = new URL(canonical);
+  const productId =
+    platform === "apple"
+      ? null
+      : platform === "jd"
+        ? (url.pathname.match(/^\/(\d+)\.html$/)?.[1] ?? null)
+        : (url.searchParams.get("id") ??
+          url.pathname.match(/^\/shopping\/product\/(\d+)$/)?.[1] ??
+          null);
+  return { productId, skuId: url.searchParams.get("skuId") };
+}
+
 export function canonicalCandidateUrl(value: string, platform: Platform): string | null {
   let url: URL;
   try {
