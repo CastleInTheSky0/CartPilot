@@ -1,6 +1,6 @@
 # 工程与代码规范
 
-版本：1.0  
+版本：1.1  
 更新日期：2026-10-15  
 适用范围：本仓库新增代码、迁移模块与维护改动。
 
@@ -152,7 +152,22 @@ npm test
 - 新模块立即遵守规范，现有大文件在各自迁移阶段拆分；完成迁移时严格行数检查无历史豁免。
 - 框架、库和版本继续复用成熟实现；不得为基础设施重复实现已有可靠工具。
 
-## 9. 参考依据
+## 9. Git 提交规范
+
+- 每完成并通过必要验证的一个功能点，立即创建一次独立提交，不累积到整个任务结束。
+- 同一功能点相关的代码、必要测试和文档放在同一提交中；不同功能点分别提交。
+- 使用 Conventional Commits，格式为 `<type>(<scope>): <中文描述>`；`scope` 可选，省略时为 `<type>: <中文描述>`。
+- `type` 使用 `feat`、`fix`、`docs`、`refactor`、`test`、`build`、`ci`、`chore` 等常用英文类型，`scope` 使用对应模块的英文标识。标题中的描述和填写的正文说明使用中文，代码标识符与工具固定字段保留原形式。
+
+示例：
+
+```text
+feat(tasks): 支持按平台设置购买数量
+fix(jd): 修复已登录状态识别
+docs(trellis): 补充功能点提交与中文描述规范
+```
+
+## 10. 参考依据
 
 - [electron-vite 项目与构建约定](https://electron-vite.org/guide/)：main / preload / renderer 分层依据。
 - [TypeScript strict](https://www.typescriptlang.org/tsconfig/strict.html)：严格类型检查配置。
